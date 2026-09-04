@@ -6,7 +6,7 @@ router.get("/profile/:userId", (req, res) => {
     const userId = req.params.userId;
 
     const sql = `
-        SELECT id, name, email, profile_photo, created_at
+        SELECT id, name, email, bio, profile_photo, created_at
         FROM users
         WHERE id = ?
     `;
@@ -36,7 +36,7 @@ router.get("/profile/:userId", (req, res) => {
 // UPDATE USER PROFILE
 router.put("/profile/:userId", (req, res) => {
     const userId = req.params.userId;
-    const { name, email } = req.body;
+    const { name, email, bio } = req.body;
 
     if (!name || !email) {
         return res.status(400).json({
@@ -46,11 +46,11 @@ router.put("/profile/:userId", (req, res) => {
 
     const sql = `
         UPDATE users
-        SET name = ?, email = ?
+        SET name = ?, email = ?, bio = ?
         WHERE id = ?
     `;
 
-    db.query(sql, [name, email, userId], (err, results) => {
+    db.query(sql, [name, email, bio, userId], (err, results) => {
         if (err) {
             console.error(err);
 
