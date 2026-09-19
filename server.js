@@ -1,11 +1,13 @@
 const express = require("express");
 const db = require("./config/db");
 const resumeAnalysisRoutes = require("./routes/resumeAnalysis");
+const authRoutes = require("./routes/auth");
 
 const app = express();
 
 app.use(express.json());
 app.use("/api/resume-analysis", resumeAnalysisRoutes);
+app.use("/api/auth", authRoutes);
 
 const PORT = 5000;
 
