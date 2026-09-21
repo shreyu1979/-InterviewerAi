@@ -1,18 +1,27 @@
 const express = require("express");
+
 const {
     register,
-    login
+    login,
+    logout
 } = require("../controllers/authController");
 
 const authenticateToken = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
+
 // Registration
 router.post("/register", register);
 
+
 // Login
 router.post("/login", login);
+
+
+// Logout
+router.post("/logout", authenticateToken, logout);
+
 
 // Protected profile route
 router.get("/profile", authenticateToken, (req, res) => {
@@ -22,5 +31,6 @@ router.get("/profile", authenticateToken, (req, res) => {
         user: req.user
     });
 });
+
 
 module.exports = router;

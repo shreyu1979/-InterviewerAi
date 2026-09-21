@@ -1,6 +1,10 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
+
 const User = require("../models/userModel");
+const AuthSession = require("../models/authSessionModel");
+
 
 const register = async (req, res) => {
     try {
@@ -99,10 +103,23 @@ const login = async (req, res) => {
             });
         }
 
+        const jti = crypto.randomUUID();
+
+        const expiresAt = new Date(
+            Date.now() + 60 * 60 * 1000
+        );
+
+        await AuthSession.create(
+            user.id,
+            jti,
+            expiresAt
+        );
+
         const token = jwt.sign(
             {
                 userId: user.id,
-                email: user.email
+                email: user.email,
+                jti: jti
             },
             process.env.JWT_SECRET,
             {
@@ -132,7 +149,28 @@ const login = async (req, res) => {
 };
 
 
+const logout = async (req, res) => {
+    try {
+        await AuthSession.revokeByJti(req.user.jti);
+
+        return res.status(200).json({
+            success: true,
+            message: "Logout successful"
+        });
+
+    } catch (error) {
+        console.error("Logout error:", error);
+
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error"
+        });
+    }
+};
+
+
 module.exports = {
     register,
-    login
+    login,
+    logout
 };
