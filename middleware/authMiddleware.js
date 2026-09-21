@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
+const AuthSession = require("../models/authSessionModel");
 
-const authenticateToken = (req, res, next) => {
+const authenticateToken = async (req, res, next) => {
     try {
         const authHeader = req.headers.authorization;
 
@@ -26,6 +27,45 @@ const authenticateToken = (req, res, next) => {
             token,
             process.env.JWT_SECRET
         );
+
+        if (!decoded.jti) {
+            return res.status(401).json({
+                success: false,
+                message: "Invalid token"
+            });
+        }
+
+        const session = await AuthSession.findByJti(
+            decoded.jti
+        );
+
+        if (!session) {
+            return res.status(401).json({
+                success: false,
+                message: "Session not found"
+            });
+        }
+
+        if (session.revoked_at) {
+            return res.status(401).json({
+                success: false,
+                message: "Session has been revoked"
+            });
+        }
+
+        if (new Date(session.expires_at) <= new Date()) {
+            return res.status(401).json({
+                success: false,
+                message: "Session has expired"
+            });
+        }
+
+        if (session.user_id !== decoded.userId) {
+            return res.status(401).json({
+                success: false,
+                message: "Invalid session"
+            });
+        }
 
         req.user = decoded;
 
