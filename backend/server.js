@@ -5,6 +5,7 @@ const cors = require("cors");
 const db = require("./src/config/database");
 const profileRoutes = require("./src/routes/profileRoutes");
 const analyticsRoutes = require("./src/routes/analyticsRoutes");
+const questionsRoutes = require("./src/routes/questionsRoutes");
 
 const app = express();
 
@@ -13,6 +14,7 @@ app.use(express.json());
 
 app.use("/api", profileRoutes);
 app.use("/api", analyticsRoutes);
+app.use("/api", questionsRoutes);
 
 app.get("/", (req, res) => {
     res.send("AI Interviewer Backend is running!");
