@@ -1,8 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/database");
+const authenticateToken = require("../middleware/authMiddleware");
 
-router.get("/profile/:userId", (req, res) => {
+// GET USER PROFILE
+router.get("/profile/:userId", authenticateToken, (req, res) => {
     const userId = req.params.userId;
 
     const sql = `
@@ -34,7 +36,7 @@ router.get("/profile/:userId", (req, res) => {
 
 
 // UPDATE USER PROFILE
-router.put("/profile/:userId", (req, res) => {
+router.put("/profile/:userId", authenticateToken, (req, res) => {
     const userId = req.params.userId;
     const { name, email, bio } = req.body;
 
