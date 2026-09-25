@@ -8,7 +8,7 @@ const profileRoutes = require("./src/routes/profileRoutes");
 const analyticsRoutes = require("./src/routes/analyticsRoutes");
 const questionsRoutes = require("./src/routes/questionsRoutes");
 const questionRoutes = require("./src/routes/questionRoutes");
-const authRoutes = require("./routes/auth");
+const authRoutes = require("./src/routes/auth");
 
 const app = express();
 
