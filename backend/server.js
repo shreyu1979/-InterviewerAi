@@ -11,6 +11,8 @@ const questionRoutes = require("./src/routes/questionRoutes");
 const authRoutes = require("./src/routes/authRoutes");
 const resumeRoutes = require("./src/routes/resumeRoutes");
 
+console.log("RESUME ROUTES LOADED");
+
 const app = express();
 
 app.use(cors());

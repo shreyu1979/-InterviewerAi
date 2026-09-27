@@ -1,11 +1,22 @@
+require("dotenv").config({
+    path: "./backend/.env"
+});
+
 const express = require("express");
+const cors = require("cors");
 const db = require("./config/db");
 const resumeAnalysisRoutes = require("./routes/resumeAnalysis");
+const authRoutes = require("./backend/src/routes/auth");
+const questionRoutes = require("./backend/src/routes/questionRoutes");
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
+
 app.use("/api/resume-analysis", resumeAnalysisRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api", questionRoutes);
 
 const PORT = 5000;
 
