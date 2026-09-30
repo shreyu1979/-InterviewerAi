@@ -1,0 +1,2789 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>tobeHired | Dashboard</title>
+
+
+    <!-- Bootstrap CSS -->
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- Bootstrap Icons -->
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+
+    <!-- Google Font -->
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Project Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- GSAP ScrollTrigger (kept from original) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+</head>
+
+
+<body>
+
+    <!-- =========================================
+         DASHBOARD PAGE
+    ========================================= -->
+
+    <div id="dashboardPage" style="display: block;">
+
+
+        <!-- NAVBAR -->
+
+        <nav class="navbar navbar-expand-lg fixed-top main-navbar">
+
+
+            <div class="container">
+
+
+                <a class="navbar-brand brand" href="#">
+
+                    tobe<span>Hired</span>
+
+                </a>
+
+
+
+                <!-- CORRECT TRANSPARENT TOGGLER -->
+
+                <button class="navbar-toggler custom-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+                    aria-label="Toggle navigation">
+
+                    <span class="navbar-toggler-icon"></span>
+
+                </button>
+
+
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+
+
+                    <ul class="navbar-nav ms-auto align-items-center">
+
+
+                        <li class="nav-item">
+
+                        <li class="nav-item">
+
+
+                            <a class="nav-link" href="#how-it-works">
+
+                                How it works?
+
+                            </a>
+
+
+                        </li>
+
+
+                        <a class="nav-link" href="#resume">
+
+                            Resume
+
+                        </a>
+
+
+                        </li>
+
+
+
+
+                        <li class="nav-item">
+
+
+                            <a class="nav-link" href="#skillTests">
+
+                                Tests
+
+                            </a>
+
+
+                        </li>
+
+
+
+                        <li class="nav-item">
+
+
+                            <a class="nav-link" href="#feedbackForm">
+
+                                Feedback
+
+                            </a>
+
+
+                        </li>
+
+
+
+                        <li class="nav-item dropdown ms-lg-2">
+
+
+                            <button class="profile-btn dropdown-toggle" type="button" data-bs-toggle="dropdown">
+
+                                <i class="bi bi-person-circle me-1"></i>
+
+
+                                <span id="dashboardUserName">
+
+                                    User
+
+                                </span>
+
+
+                            </button>
+
+
+
+                            <ul class="dropdown-menu dropdown-menu-end">
+
+                                <li>
+
+                                    <a class="dropdown-item" href="profile.html">
+
+                                        <i class="bi bi-person-vcard me-2"></i>
+
+                                        Profile
+
+                                    </a>
+
+                                </li>
+
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+
+
+                                <li>
+
+
+                                    <button class="dropdown-item" onclick="logout()">
+
+                                        <i class="bi bi-box-arrow-right me-2"></i>
+
+                                        Logout
+
+                                    </button>
+
+
+                                </li>
+
+
+                            </ul>
+
+
+                        </li>
+
+
+                    </ul>
+
+
+                </div>
+
+
+            </div>
+
+
+        </nav>
+
+
+
+        <!-- HERO -->
+
+        <section class="hero">
+
+
+            <div class="container">
+
+
+                <div class="row align-items-center">
+
+
+                    <div class="col-lg-8">
+
+
+                        <div class="hero-badge">
+
+
+                            <i class="bi bi-stars me-2"></i>
+
+                            AI Powered Interview Preparation
+
+
+                        </div>
+
+
+
+                        <h1>
+
+
+                            Practice Smarter.
+
+
+                            <br>
+
+
+                            <span class="gradient-text">
+
+                                Get Hired Faster.
+
+                            </span>
+
+
+                        </h1>
+
+
+
+                        <p>
+
+
+                            AI Interviewer helps you practice real interview scenarios, get instant feedback, and
+                            improve your skills with personalized guidance.
+
+
+
+
+                        </p>
+
+
+
+                        <!-- RESPONSIVE BUTTONS -->
+
+                        <div class="hero-buttons">
+
+
+                            <a href="#resume" class="btn-primary-custom hero-btn">
+
+
+                                <span>
+
+                                    Analyze Resume
+
+                                </span>
+
+
+                                <i class="bi bi-arrow-right"></i>
+
+
+                            </a>
+
+
+
+                            <a href="#skillTests" class="btn-secondary-custom hero-btn">
+
+                                Test your skills
+
+                            </a>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+        <!-- =========================================
+     HOW IT WORKS SECTION
+========================================= -->
+
+        <section class="how-it-works" id="how-it-works">
+
+
+            <!-- BACKGROUND DECORATIONS -->
+
+            <div class="how-glow glow-left"></div>
+
+            <div class="how-glow glow-right"></div>
+
+
+            <div class="how-container">
+
+
+                <!-- =====================================
+             SECTION HEADER
+        ====================================== -->
+
+                <div class="how-header">
+
+
+                    <div class="section-badge">
+
+                        <i class="bi bi-stars"></i>
+
+                        YOUR PREPARATION JOURNEY
+
+                    </div>
+
+
+                    <h2>
+
+                        How It <span>Works?</span>
+
+                    </h2>
+
+
+                    <p>
+
+                        Choose your journey, test your skills,
+                        identify weak areas and improve with
+                        personalized AI-powered practice.
+
+                    </p>
+
+
+                </div>
+
+
+
+                <!-- =====================================
+             JOURNEY SELECTOR / INTRO
+        ====================================== -->
+
+                <div class="journey-intro">
+
+
+                    <div class="journey-intro-icon">
+
+                        <i class="bi bi-diagram-3"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+
+                            TWO WAYS TO PREPARE
+
+                        </span>
+
+
+                        <h3>
+
+                            Choose the journey that works for you.
+
+                        </h3>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- =====================================
+             JOURNEY 01
+        ====================================== -->
+
+                <div class="journey-block">
+
+
+                    <!-- JOURNEY HEADER -->
+
+                    <div class="journey-title">
+
+
+                        <div class="journey-number">
+
+                            01
+
+                        </div>
+
+
+                        <div>
+
+
+                            <span class="journey-label">
+
+                                AI PERSONALIZED JOURNEY
+
+                            </span>
+
+
+                            <h3>
+
+                                Start With Your Resume
+
+                            </h3>
+
+
+                            <p>
+
+                                Let AI understand your skills and
+                                create a personalized preparation path.
+
+                            </p>
+
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- =================================
+                 STEPS GRID
+            ================================== -->
+
+
+
+                    <!-- =========================================
+     OPTION 01 - COMPLETE AI GUIDED JOURNEY
+========================================= -->
+
+                    <section class="ai-guided-journey">
+
+
+                        <!-- =====================================
+         JOURNEY FLOW BOX
+    ====================================== -->
+
+                        <div class="ai-flow-box">
+
+
+                            <!-- =================================
+             FIRST ROW
+        ================================== -->
+
+                            <div class="ai-flow-row">
+
+
+                                <!-- STEP 01 -->
+
+                                <div class="ai-flow-step">
+
+
+                                    <div class="ai-step-icon">
+
+                                        <i class="bi bi-person-plus"></i>
+
+                                    </div>
+
+
+                                    <div class="ai-step-text">
+
+                                        <span>
+
+                                            STEP 01
+
+                                        </span>
+
+
+                                        <h3>
+
+                                            Create Your Account
+
+                                        </h3>
+
+                                    </div>
+
+                                </div>
+
+
+
+                                <!-- ARROW -->
+
+                                <div class="ai-flow-arrow">
+
+                                    <i class="bi bi-arrow-right"></i>
+
+                                </div>
+
+
+
+                                <!-- STEP 02 -->
+
+                                <div class="ai-flow-step">
+
+
+                                    <div class="ai-step-icon">
+
+                                        <i class="bi bi-file-earmark-text"></i>
+
+                                    </div>
+
+
+                                    <div class="ai-step-text">
+
+                                        <span>
+
+                                            STEP 02
+
+                                        </span>
+
+
+                                        <h3>
+
+                                            Analyze Your Resume
+
+                                        </h3>
+
+                                    </div>
+
+                                </div>
+
+
+
+                                <!-- ARROW -->
+
+                                <div class="ai-flow-arrow">
+
+                                    <i class="bi bi-arrow-right"></i>
+
+                                </div>
+
+
+
+                                <!-- STEP 03 -->
+
+                                <div class="ai-flow-step">
+
+
+                                    <div class="ai-step-icon">
+
+                                        <i class="bi bi-cpu"></i>
+
+                                    </div>
+
+
+                                    <div class="ai-step-text">
+
+                                        <span>
+
+                                            STEP 03
+
+                                        </span>
+
+
+                                        <h3>
+
+                                            Get Your Aptitude
+
+                                        </h3>
+
+                                    </div>
+
+                                </div>
+
+
+
+                                <!-- ARROW -->
+
+                                <div class="ai-flow-arrow">
+
+                                    <i class="bi bi-arrow-right"></i>
+
+                                </div>
+
+
+
+                                <!-- STEP 04 -->
+
+                                <div class="ai-flow-step">
+
+
+                                    <div class="ai-step-icon">
+
+                                        <i class="bi bi-pencil-square"></i>
+
+                                    </div>
+
+
+                                    <div class="ai-step-text">
+
+                                        <span>
+
+                                            STEP 04
+
+                                        </span>
+
+
+                                        <h3>
+
+                                            Solve the Aptitude
+
+                                        </h3>
+
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+
+
+
+                            <!-- =================================
+             DIVIDER BETWEEN ROWS
+        ================================== -->
+
+                            <div class="ai-flow-divider"></div>
+
+
+
+                            <!-- =================================
+             SECOND ROW
+        ================================== -->
+
+                            <div class="ai-flow-row">
+
+
+                                <!-- STEP 05 -->
+
+                                <div class="ai-flow-step">
+
+
+                                    <div class="ai-step-icon">
+
+                                        <i class="bi bi-bar-chart-line"></i>
+
+                                    </div>
+
+
+                                    <div class="ai-step-text">
+
+                                        <span>
+
+                                            STEP 05
+
+                                        </span>
+
+
+                                        <h3>
+
+                                            Get Your Analysis
+
+                                        </h3>
+
+                                    </div>
+
+                                </div>
+
+
+
+                                <!-- ARROW -->
+
+                                <div class="ai-flow-arrow">
+
+                                    <i class="bi bi-arrow-right"></i>
+
+                                </div>
+
+
+
+                                <!-- STEP 06 -->
+
+                                <div class="ai-flow-step">
+
+
+                                    <div class="ai-step-icon">
+
+                                        <i class="bi bi-journal-check"></i>
+
+                                    </div>
+
+
+                                    <div class="ai-step-text">
+
+                                        <span>
+
+                                            STEP 06
+
+                                        </span>
+
+
+                                        <h3>
+
+                                            Practice 5 Aptitudes
+
+                                        </h3>
+
+                                    </div>
+
+                                </div>
+
+
+
+                                <!-- ARROW -->
+
+                                <div class="ai-flow-arrow">
+
+                                    <i class="bi bi-arrow-right"></i>
+
+                                </div>
+
+
+
+                                <!-- STEP 07 -->
+
+                                <div class="ai-flow-step">
+
+
+                                    <div class="ai-step-icon">
+
+                                        <i class="bi bi-bullseye"></i>
+
+                                    </div>
+
+
+                                    <div class="ai-step-text">
+
+                                        <span>
+
+                                            STEP 07
+
+                                        </span>
+
+
+                                        <h3>
+
+                                            Practice Weak Skills
+
+                                        </h3>
+
+                                    </div>
+
+                                </div>
+
+
+
+                                <!-- ARROW -->
+
+                                <div class="ai-flow-arrow">
+
+                                    <i class="bi bi-arrow-right"></i>
+
+                                </div>
+
+
+
+                                <!-- STEP 08 -->
+
+                                <div class="ai-flow-step future-step">
+
+
+                                    <div class="ai-step-icon future-icon">
+
+                                        <i class="bi bi-robot"></i>
+
+                                    </div>
+
+
+                                    <div class="ai-step-text">
+
+                                        <span>
+
+                                            STEP 08 • COMING LATER
+
+                                        </span>
+
+
+                                        <h3>
+
+                                            AI Career Guidance
+
+                                        </h3>
+
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                    </section>
+
+
+
+                    <!-- =====================================
+             JOURNEY DIVIDER
+        ====================================== -->
+
+                    <div class="journey-divider">
+
+
+                        <span>
+
+                            OR
+
+                        </span>
+
+
+                    </div>
+
+
+
+                    <!-- =====================================
+             JOURNEY 02
+        ====================================== -->
+
+                    <div class="journey-block direct-journey">
+
+
+                        <!-- JOURNEY HEADER -->
+
+                        <div class="journey-title">
+
+
+                            <div class="journey-number direct-number">
+
+                                02
+
+                            </div>
+
+
+                            <div>
+
+
+                                <span class="journey-label">
+
+                                    DIRECT SKILL TEST
+
+                                </span>
+
+
+                                <h3>
+
+                                    Start Testing Your Skills Directly
+
+                                </h3>
+
+
+                                <p>
+
+                                    Already know what you want to practice?
+                                    Select a skill and start immediately.
+
+                                </p>
+
+
+                            </div>
+
+
+                        </div>
+
+
+
+                        <!-- DIRECT FLOW -->
+
+                        <div class="direct-flow">
+
+
+                            <!-- STEP 1 -->
+
+                            <div class="direct-step">
+
+
+                                <div class="direct-icon">
+
+                                    <i class="bi bi-person-check"></i>
+
+                                </div>
+
+
+                                <div>
+
+
+                                    <span>
+
+                                        STEP 01
+
+                                    </span>
+
+
+                                    <h4>
+
+                                        Create Your Account
+
+                                    </h4>
+
+
+                                </div>
+
+
+                            </div>
+
+
+
+                            <div class="flow-arrow">
+
+                                <i class="bi bi-arrow-right"></i>
+
+                            </div>
+
+
+
+                            <!-- STEP 2 -->
+
+                            <div class="direct-step">
+
+
+                                <div class="direct-icon">
+
+                                    <i class="bi bi-layers"></i>
+
+                                </div>
+
+
+                                <div>
+
+
+                                    <span>
+
+                                        STEP 02
+
+                                    </span>
+
+
+                                    <h4>
+
+                                        Choose Your Skill
+
+                                    </h4>
+
+
+                                </div>
+
+
+                            </div>
+
+
+
+                            <div class="flow-arrow">
+
+                                <i class="bi bi-arrow-right"></i>
+
+                            </div>
+
+
+
+                            <!-- STEP 3 -->
+
+                            <div class="direct-step">
+
+
+                                <div class="direct-icon">
+
+                                    <i class="bi bi-clipboard-check"></i>
+
+                                </div>
+
+
+                                <div>
+
+
+                                    <span>
+
+                                        STEP 03
+
+                                    </span>
+
+
+                                    <h4>
+
+                                        Give the Test
+
+                                    </h4>
+
+
+                                </div>
+
+
+                            </div>
+
+
+
+                            <div class="flow-arrow">
+
+                                <i class="bi bi-arrow-right"></i>
+
+                            </div>
+
+
+
+                            <!-- STEP 4 -->
+
+                            <div class="direct-step">
+
+
+                                <div class="direct-icon">
+
+                                    <i class="bi bi-graph-up"></i>
+
+                                </div>
+
+
+                                <div>
+
+
+                                    <span>
+
+                                        STEP 04
+
+                                    </span>
+
+
+                                    <h4>
+
+                                        Get Analysis
+
+                                    </h4>
+
+
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- =====================================
+             FINAL AI CAREER SECTION
+        ====================================== -->
+
+                    <div class="career-section">
+
+
+                        <!-- AI BACKGROUND ELEMENT -->
+
+                        <div class="career-glow"></div>
+
+
+                        <div class="career-content">
+
+
+                            <div class="career-icon">
+
+                                <i class="bi bi-robot"></i>
+
+                            </div>
+
+
+                            <div class="career-text">
+
+
+                                <span>
+
+                                    AI-POWERED FUTURE INSIGHT
+
+                                </span>
+
+
+                                <h3>
+
+                                    Discover Your Career Direction
+
+                                </h3>
+
+
+                                <p>
+
+                                    Based on your skills, aptitude results
+                                    and performance, AI will help you understand
+                                    suitable career paths and areas where you can grow.
+
+                                </p>
+
+
+                            </div>
+
+
+                            <div class="career-arrow">
+
+                                <i class="bi bi-arrow-up-right"></i>
+
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+
+
+                </div>
+
+
+        </section>
+
+
+        <!-- =========================================
+     HOW IT WORKS SECTION END
+========================================= -->
+
+
+
+        <!-- =========================================
+             RESUME
+        ========================================= -->
+
+        <section class="section" id="resume">
+
+
+            <div class="container">
+
+
+                <div class="text-center">
+
+
+                    <h2 class="section-title">
+
+                        Resume Analysis
+
+                    </h2>
+
+
+                    <p class="section-subtitle">
+
+                        Upload your resume and discover your current skill profile.
+
+                    </p>
+
+
+                </div>
+
+
+
+                <div class="row justify-content-center">
+
+
+                    <div class="col-lg-8">
+
+
+                        <div class="glass-card">
+
+
+                            <label for="resumeInput" class="upload-area">
+
+
+                                <i class="bi bi-cloud-arrow-up"></i>
+
+
+                                <h5 class="mt-3">
+
+                                    Upload your resume
+
+                                </h5>
+
+
+                                <p class="card-text mb-0">
+
+                                    PDF • Maximum 5MB
+
+                                </p>
+
+
+                                <input type="file" id="resumeInput" accept=".pdf">
+
+
+                            </label>
+
+                            <!-- INVALID RESUME MESSAGE -->
+
+                            <div id="invalidResumeMessage" class="invalid-resume-message">
+
+                                <div class="invalid-icon">
+
+                                    <i class="bi bi-file-earmark-x"></i>
+
+                                </div>
+
+                                <h3>Resume Not Detected</h3>
+
+                                <p>
+
+                                    This file doesn't appear to be a resume.
+                                    Please upload a valid resume containing your
+                                    professional information.
+
+                                </p>
+
+                                <button type="button" id="uploadAgainBtn">
+
+                                    <i class="bi bi-arrow-repeat"></i>
+
+                                    Upload Another File
+
+                                </button>
+
+                            </div>
+
+
+
+                            <div id="resumeResults" style="display: none !important;">
+                                <div class="resume-analysis">
+
+
+                                    <!-- SECTION TITLE -->
+
+                                    <div class="analysis-title">
+
+                                        <i class="bi bi-robot"></i>
+
+                                        <span>Resume Analysis</span>
+
+                                    </div>
+
+
+
+                                    <!-- DETECTED SKILLS -->
+
+                                    <div class="analysis-block">
+
+
+                                        <h3>
+
+                                            <i class="bi bi-lightning-charge"></i>
+
+                                            Detected Skills
+
+                                        </h3>
+
+
+                                        <p class="analysis-description">
+
+                                            Analyzed! your resume and identified the following skills.
+
+                                        </p>
+
+
+                                        <div class="skills-list">
+
+
+                                            <span>HTML</span>
+
+                                            <span>CSS</span>
+
+                                            <span>JavaScript</span>
+
+                                            <span>Bootstrap</span>
+
+                                            <span>Java</span>
+
+                                            <span>Git</span>
+
+                                            <span>React</span>
+
+                                            <span>SQL</span>
+
+
+                                        </div>
+
+                                    </div>
+
+
+
+                                    <!-- =====================================
+         APTITUDE TEST
+    ====================================== -->
+
+                                    <div class="analysis-block aptitude-section">
+
+
+                                        <div class="block-heading-row">
+
+
+                                            <div>
+
+                                                <h3>
+
+                                                    <i class="bi bi-cpu"></i>
+
+                                                    Skill-Based Aptitude Test
+
+                                                </h3>
+
+
+                                                <p class="analysis-description">
+
+                                                    Your aptitude test is generated based on the skills detected
+                                                    from your resume.
+
+                                                </p>
+
+                                            </div>
+
+
+                                            <!-- <div class="ai-badge">
+
+                                                <i class="bi bi-stars"></i>
+
+                                                AI GENERATED
+
+                                            </div> -->
+
+
+                                        </div>
+
+
+
+                                        <!-- SKILLS USED FOR TEST -->
+
+                                        <!-- <div class="test-skills">
+
+
+                                            <span>HTML</span>
+
+                                            <span>CSS</span>
+
+                                            <span>JavaScript</span>
+
+                                            <span>React</span>
+
+
+                                        </div> -->
+
+
+
+                                        <!-- TEST INFORMATION -->
+
+                                        <div class="test-info-row">
+
+
+                                            <div class="test-info-item">
+
+                                                <i class="bi bi-question-circle"></i>
+
+                                                <div>
+
+                                                    <strong>20 Questions</strong>
+
+                                                    <span>Skill-Based Test</span>
+
+                                                </div>
+
+                                            </div>
+
+
+
+                                            <div class="test-info-item">
+
+                                                <i class="bi bi-clock"></i>
+
+                                                <div>
+
+                                                    <strong>20 Minutes</strong>
+
+                                                    <span>Recommended Time</span>
+
+                                                </div>
+
+                                            </div>
+
+
+
+                                            <div class="test-info-item">
+
+                                                <i class="bi bi-bar-chart"></i>
+
+                                                <div>
+
+                                                    <strong>Multiple Skills</strong>
+
+                                                    <span>AI Selected Topics</span>
+
+                                                </div>
+
+                                            </div>
+
+
+                                        </div>
+
+
+
+                                        <!-- START TEST BUTTON -->
+
+                                        <button id="startAptitudeTestBtn" class="primary-action-btn">
+                                            Start Aptitude Test
+                                            <i class="bi bi-arrow-right"></i>
+                                        </button>
+
+
+                                    </div>
+
+
+
+                                    <!-- =====================================
+         APTITUDE RESULT
+         SHOW AFTER TEST IS COMPLETED
+    ====================================== -->
+
+                                    <div class="analysis-block result-section">
+
+
+                                        <div class="block-heading-row">
+
+
+                                            <div>
+
+                                                <h3>
+
+                                                    <i class="bi bi-graph-up-arrow"></i>
+
+                                                    Aptitude Performance
+
+                                                </h3>
+
+
+                                                <p class="analysis-description">
+
+                                                    Your performance based on the aptitude test.
+
+                                                </p>
+
+                                            </div>
+
+
+                                            <span class="completed-badge">
+
+                                                <i class="bi bi-check-circle"></i>
+
+                                                COMPLETED
+
+                                            </span>
+
+
+                                        </div>
+
+
+
+                                        <!-- SCORE -->
+
+                                        <div class="aptitude-score-box">
+
+
+                                            <div class="score-circle">
+
+                                                <strong>0%</strong>
+
+                                                <span>Score</span>
+
+                                            </div>
+
+
+                                            <div class="score-details">
+
+
+                                                <h4>
+
+                                                    Good Performance!
+
+                                                </h4>
+
+
+                                                <p>
+
+                                                    You performed well overall, but there are a few
+                                                    areas where additional practice can improve your results.
+
+                                                </p>
+
+
+
+                                            </div>
+
+
+                                        </div>
+
+
+                                    </div>
+
+
+
+                                    <!-- =====================================
+         WEAK POINTS
+    ====================================== -->
+
+                                    <div class="analysis-block weak-points-section">
+
+
+                                        <h3>
+
+                                            <i class="bi bi-bullseye"></i>
+
+                                            Areas That Need Improvement
+
+                                        </h3>
+
+
+                                        <p class="analysis-description">
+
+                                            These topics were identified as areas where you need
+                                            additional practice.
+
+                                        </p>
+
+
+
+                                        <div class="weak-points-grid">
+
+
+                                            <div class="weak-point-card">
+
+
+                                                <div class="weak-icon">
+
+                                                    <i class="bi bi-code-slash"></i>
+
+                                                </div>
+
+
+                                                <div>
+
+                                                    <h4>
+
+                                                        Problem Solving & Programming Logic
+
+                                                    </h4>
+
+
+                                                    <p>
+
+                                                        Improve logical thinking, debugging, algorithms, and
+                                                        problem-solving skills.
+
+                                                    </p>
+
+                                                </div>
+
+
+                                            </div>
+
+
+
+                                            <div class="weak-point-card">
+
+
+                                                <div class="weak-icon">
+
+                                                    <i class="bi bi-braces"></i>
+
+                                                </div>
+
+
+                                                <div>
+
+                                                    <h4>
+
+                                                        Core Computer Science Fundamentals
+
+                                                    </h4>
+
+
+                                                    <p>
+
+                                                        Strengthen programming basics, DBMS, OOP, operating systems,
+                                                        networking, and basic system concepts.
+
+                                                    </p>
+
+                                                </div>
+
+
+                                            </div>
+
+
+
+                                            <div class="weak-point-card">
+
+
+                                                <div class="weak-icon">
+
+                                                    <i class="bi bi-database"></i>
+
+                                                </div>
+
+
+                                                <div>
+
+                                                    <h4>
+
+                                                        Practical Skills & Tools
+
+                                                    </h4>
+
+
+                                                    <p>
+
+                                                        Practice real projects, Git/GitHub, APIs, debugging,
+                                                        documentation, and industry tools. Build projects.
+
+                                                    </p>
+
+                                                </div>
+
+
+                                            </div>
+
+
+                                        </div>
+
+
+                                        <!-- 
+                                        PRACTICE BUTTON
+
+                                        <button class="practice-btn">
+
+                                            <i class="bi bi-lightning-charge"></i>
+
+                                            Practice Weak Areas
+
+                                        </button> -->
+
+
+                                    </div>
+
+
+
+
+                                    <!-- =====================================
+         CAREER RECOMMENDATION
+    ====================================== -->
+                                    <!-- 
+                                    <div class="career-recommendation-section">
+
+
+                                        <div class="career-ai-icon">
+
+                                            <i class="bi bi-robot"></i>
+
+                                        </div>
+
+
+
+                                        <div class="career-content">
+
+
+                                            <span class="future-label">
+
+                                                AI CAREER RECOMMENDATION
+
+                                            </span>
+
+
+                                            <h3>
+
+                                                Discover Your Best Career Path
+
+                                            </h3>
+
+
+                                            <p>
+
+                                                Based on your detected skills, aptitude performance,
+                                                strengths and areas for improvement, our AI will recommend
+                                                career paths that best match your profile.
+
+                                            </p>
+
+
+                                            <div class="career-coming">
+
+                                                <i class="bi bi-stars"></i>
+
+                                                Advanced AI Career Agent Coming Soon
+
+                                            </div>
+
+
+                                        </div>
+
+
+                                    </div> -->
+
+
+
+                                    <!-- =====================================
+         RESUME IMPROVEMENT
+    ====================================== -->
+
+                                    <div class="analysis-block resume-improvement-section">
+
+
+                                        <h3>
+
+                                            <i class="bi bi-file-earmark-text"></i>
+
+                                            Resume Improvement Suggestions
+
+                                        </h3>
+
+
+                                        <p class="analysis-description">
+
+                                            Improve your resume with these recommendations.
+
+                                        </p>
+
+
+
+                                        <div class="improvement-list">
+
+
+                                            <div class="improvement-item">
+
+                                                <i class="bi bi-check2-circle"></i>
+
+                                                <span>
+
+                                                    Add more details about your technical projects.
+
+                                                </span>
+
+                                            </div>
+
+
+                                            <div class="improvement-item">
+
+                                                <i class="bi bi-check2-circle"></i>
+
+                                                <span>
+
+                                                    Highlight your strongest technical skills clearly.
+
+                                                </span>
+
+                                            </div>
+
+
+                                            <div class="improvement-item">
+
+                                                <i class="bi bi-check2-circle"></i>
+
+                                                <span>
+
+                                                    Add relevant certifications and achievements.
+
+                                                </span>
+
+                                            </div>
+
+
+                                            <div class="improvement-item">
+
+                                                <i class="bi bi-check2-circle"></i>
+
+                                                <span>
+
+                                                    Improve the structure and readability of your resume.
+
+                                                </span>
+
+                                            </div>
+
+
+                                        </div>
+
+
+                                    </div>
+
+
+
+                                    <!-- =====================================
+         STANDARD RESUME FORMAT
+    ====================================== -->
+
+                                    <div class="standard-resume-section">
+
+
+                                        <div class="standard-resume-icon">
+
+                                            <i class="bi bi-file-earmark-richtext"></i>
+
+                                        </div>
+
+
+                                        <div class="standard-resume-content">
+
+
+                                            <span>
+
+                                                RECOMMENDED FORMAT
+
+                                            </span>
+
+
+                                            <h3>
+
+                                                View a Standard Resume Format
+
+                                            </h3>
+
+
+                                            <p>
+
+                                                Use a professional resume structure to present
+                                                your skills, projects, education and experience clearly.
+
+                                            </p>
+
+
+                                        </div>
+
+
+
+                                        <!-- 
+             CHANGE THE IMAGE PATH HERE LATER
+        -->
+
+                                        <a href="img\ResumeStanderd.jpg" target="_blank" class="standard-resume-btn">
+
+                                            View Standard Format
+
+                                            <i class="bi bi-box-arrow-up-right"></i>
+
+                                        </a>
+
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+        </section>
+
+        <!-- =========================================
+     AI RESUME ANALYSIS SECTION
+========================================= -->
+
+
+        <!-- =========================================
+             SKILL TESTS
+        ========================================= -->
+
+        <!-- =========================================
+     SKILL BASED TESTS SECTION
+========================================= -->
+
+        <!-- =========================================
+     SKILL BASED TESTS SECTION
+========================================= -->
+
+        <section class="skill-tests-section" id="skillTests">
+
+            <!-- SECTION HEADING -->
+
+            <div class="skill-tests-heading">
+
+
+                <div class="skill-heading-content">
+
+                    <span class="skill-small-title">
+                        SKILL BASED TESTS
+                    </span>
+
+                    <h2>
+                        Test Your Skills Directly
+                    </h2>
+
+                    <p>
+                        Select a skill and test your knowledge through
+                        structured levels. Every test contains 10 questions,
+                        and difficulty increases from easy to hard.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- =====================================
+         SKILLS SELECTION
+    ====================================== -->
+
+            <div class="skills-selection-box">
+
+
+                <div class="skills-selection-header">
+
+                    <div>
+
+                        <span>
+                            SELECT A SKILL
+                        </span>
+
+                        <h3>
+                            Choose What You Want to Practice
+                        </h3>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- SKILLS GRID -->
+
+                <div class="skills-test-grid">
+
+
+                    <!-- HTML -->
+
+                    <!-- HTML -->
+                    <div class="test-skill-card" data-skill="HTML">
+
+                        <div class="test-skill-icon">
+                            <i class="bi bi-code-square"></i>
+                        </div>
+
+                        <h4>
+                            HTML
+                        </h4>
+
+                        <p>
+                            Structure and web fundamentals
+                        </p>
+
+                    </div>
+
+
+
+
+                    <!-- CSS -->
+                    <div class="test-skill-card" data-skill="CSS">
+
+                        <div class="test-skill-icon">
+                            <i class="bi bi-palette"></i>
+                        </div>
+
+                        <h4>
+                            CSS
+                        </h4>
+
+                        <p>
+                            Styling and responsive layouts
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- JAVASCRIPT -->
+                    <div class="test-skill-card" data-skill="JavaScript">
+
+                        <div class="test-skill-icon">
+                            <i class="bi bi-braces"></i>
+                        </div>
+
+                        <h4>
+                            JavaScript
+                        </h4>
+
+                        <p>
+                            Logic and web interactivity
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- BOOTSTRAP -->
+                    <div class="test-skill-card" data-skill="Bootstrap">
+
+                        <div class="test-skill-icon">
+                            <i class="bi bi-grid-3x3-gap"></i>
+                        </div>
+
+                        <h4>
+                            Bootstrap
+                        </h4>
+
+                        <p>
+                            Responsive UI components
+                        </p>
+
+                    </div>
+
+
+                    <!-- REACT -->
+                    <div class="test-skill-card" data-skill="React.js">
+
+                        <div class="test-skill-icon">
+                            <i class="bi bi-boxes"></i>
+                        </div>
+
+                        <h4>
+                            React.js
+                        </h4>
+
+                        <p>
+                            Components and modern frontend
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- NODE JS -->
+                    <div class="test-skill-card" data-skill="Node.js">
+
+                        <div class="test-skill-icon">
+                            <i class="bi bi-server"></i>
+                        </div>
+
+                        <h4>
+                            Node.js
+                        </h4>
+
+                        <p>
+                            Backend JavaScript development
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- EXPRESS -->
+                    <div class="test-skill-card" data-skill="Express.js">
+
+                        <div class="test-skill-icon">
+                            <i class="bi bi-diagram-3"></i>
+                        </div>
+
+                        <h4>
+                            Express.js
+                        </h4>
+
+                        <p>
+                            Backend APIs and servers
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- PYTHON -->
+                    <div class="test-skill-card" data-skill="Python">
+
+                        <div class="test-skill-icon">
+                            <i class="bi bi-terminal"></i>
+                        </div>
+
+                        <h4>
+                            Python
+                        </h4>
+
+                        <p>
+                            Programming and automation
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- JAVA -->
+
+                    <div class="test-skill-card" data-skill="Java">
+
+                        <div class="test-skill-icon">
+                            <i class="bi bi-cup-hot"></i>
+                        </div>
+
+                        <h4>
+                            Java
+                        </h4>
+
+                        <p>
+                            Object-oriented programming
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- PHP -->
+
+                    <div class="test-skill-card" data-skill="PHP">
+
+                        <div class="test-skill-icon">
+                            <i class="bi bi-filetype-php"></i>
+                        </div>
+
+                        <h4>
+                            PHP
+                        </h4>
+
+                        <p>
+                            Server-side web development
+                        </p>
+
+                    </div>
+
+
+                    <!-- MONGODB -->
+
+                    <div class="test-skill-card" data-skill="MongoDB">
+
+                        <div class="test-skill-icon">
+                            <i class="bi bi-hdd-network"></i>
+                        </div>
+
+                        <h4>
+                            MongoDB
+                        </h4>
+
+                        <p>
+                            NoSQL database concepts
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- EXCEL -->
+
+                    <div class="test-skill-card" data-skill="Excel">
+
+                        <div class="test-skill-icon">
+                            <i class="bi bi-file-earmark-spreadsheet"></i>
+                        </div>
+
+                        <h4>
+                            Excel
+                        </h4>
+
+                        <p>
+                            Data analysis and formulas
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- POWER BI -->
+                    <div class="test-skill-card" data-skill="Power BI">
+
+                        <div class="test-skill-icon">
+                            <i class="bi bi-bar-chart-line"></i>
+                        </div>
+
+                        <h4>
+                            Power BI
+                        </h4>
+
+                        <p>
+                            Data visualization and reports
+                        </p>
+
+                    </div>
+
+
+                    <!-- C -->
+
+                    <div class="test-skill-card" data-skill="C">
+
+                        <div class="test-skill-icon">
+                            <i class="bi bi-filetype-c"></i>
+                        </div>
+
+                        <h4>
+                            C
+                        </h4>
+
+                        <p>
+                            Programming fundamentals
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- C++ -->
+
+                    <div class="test-skill-card" data-skill="C++">
+
+                        <div class="test-skill-icon">
+                            <i class="bi bi-code-slash"></i>
+                        </div>
+
+                        <h4>
+                            C++
+                        </h4>
+
+                        <p>
+                            Advanced programming concepts
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- OOP -->
+
+                    <div class="test-skill-card" data-skill="OOP">
+
+                        <div class="test-skill-icon">
+                            <i class="bi bi-box"></i>
+                        </div>
+
+                        <h4>
+                            OOP
+                        </h4>
+
+                        <p>
+                            Object-oriented programming
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- DATA STRUCTURES -->
+                    <div class="test-skill-card" data-skill="Data Structures">
+
+                        <div class="test-skill-icon">
+                            <i class="bi bi-diagram-2"></i>
+                        </div>
+
+                        <h4>
+                            Data Structures
+                        </h4>
+
+                        <p>
+                            Arrays, stacks, queues and trees
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- ALGORITHMS -->
+
+                    <div class="test-skill-card" data-skill="Algorithms">
+
+                        <div class="test-skill-icon">
+                            <i class="bi bi-bezier2"></i>
+                        </div>
+
+                        <h4>
+                            Algorithms
+                        </h4>
+
+                        <p>
+                            Logic and problem solving
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- MACHINE LEARNING -->
+                    <div class="test-skill-card" data-skill="Machine Learning">
+
+                        <div class="test-skill-icon">
+                            <i class="bi bi-cpu"></i>
+                        </div>
+
+                        <h4>
+                            Machine Learning
+                        </h4>
+
+                        <p>
+                            Models and prediction concepts
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- DEEP LEARNING -->
+                    <div class="test-skill-card" data-skill="Deep Learning">
+
+                        <div class="test-skill-icon">
+                            <i class="bi bi-cpu-fill"></i>
+                        </div>
+
+                        <h4>
+                            Deep Learning
+                        </h4>
+
+                        <p>
+                            Neural networks and AI concepts
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- AI -->
+                    <div class="test-skill-card" data-skill="Artificial Intelligence">
+
+                        <div class="test-skill-icon">
+                            <i class="bi bi-robot"></i>
+                        </div>
+
+                        <h4>
+                            Artificial Intelligence
+                        </h4>
+
+                        <p>
+                            AI concepts and applications
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- STATISTICS -->
+
+                    <div class="test-skill-card" data-skill="Statistics">
+
+                        <div class="test-skill-icon">
+                            <i class="bi bi-graph-up"></i>
+                        </div>
+
+                        <h4>
+                            Statistics
+                        </h4>
+
+                        <p>
+                            Data and statistical concepts
+                        </p>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+            <!-- =========================================
+     LIVE EXAMPLE
+========================================= -->
+
+            <!-- =========================================
+     LIVE JAVASCRIPT TEST EXAMPLE
+========================================= -->
+
+            <section class="live-test-section">
+
+                <div class="live-test-header">
+
+                    <div>
+
+
+                        <h2>
+                            Give your test here
+                        </h2>
+
+                    </div>
+
+
+                    <div class="live-skill-badge">
+
+                        <i class="bi bi-code-slash"></i>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- TEST CONTAINER -->
+
+                <div class="live-test-box" id="liveTestBox" style="display: none;">
+
+
+                    <!-- TEST INFO -->
+
+                    <div class="live-test-info">
+
+                        <div>
+
+
+                            <h3>
+
+                            </h3>
+
+                        </div>
+
+
+                        <div class="live-question-number">
+
+                            Question
+                            <strong id="questionNumber">
+                                1
+                            </strong>
+                            / 20
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- PROGRESS -->
+
+                    <div class="live-progress-container">
+
+                        <div class="live-progress-bar">
+
+                            <div id="liveProgress"></div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- QUESTION -->
+
+                    <div class="live-question-area">
+
+                        <span class="question-title">
+                            QUESTION
+                        </span>
+
+                        <h3 id="questionText">
+                            Which keyword is used to declare a block-scoped variable?
+                        </h3>
+
+                    </div>
+
+
+
+                    <!-- OPTIONS -->
+
+                    <div class="live-options" id="liveOptions">
+
+                        <!-- JavaScript will add options here -->
+
+                    </div>
+
+
+
+                    <!-- BUTTON -->
+
+                    <div class="live-test-bottom">
+
+                        <span id="answerMessage">
+                            Select an answer to continue
+                        </span>
+
+
+                        <button id="nextQuestionBtn">
+
+                            Next Question
+
+                            <i class="bi bi-arrow-right"></i>
+
+                        </button>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- =====================================
+         RESULTS
+    ====================================== -->
+
+                <div class="live-result-box" id="liveResultBox">
+
+
+                    <div class="result-top">
+
+                        <div>
+
+                            <span>
+                                TEST COMPLETED
+                            </span>
+
+                            <h3>
+                                Your JavaScript Result
+                            </h3>
+
+                        </div>
+
+
+                        <button id="restartTestBtn">
+
+                            <i class="bi bi-arrow-repeat"></i>
+
+                            Try Again
+
+                        </button>
+
+                    </div>
+
+
+
+                    <!-- SCORE -->
+
+                    <div class="live-score">
+
+                        <span id="finalScore">
+
+                            0 / 20
+
+                        </span>
+
+                        <p>
+                            Final Score
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- RESULT STATS -->
+
+                    <div class="live-result-stats">
+
+
+                        <div class="live-stat correct-stat">
+
+                            <i class="bi bi-check-circle"></i>
+
+                            <div>
+
+                                <strong id="correctCount">
+
+                                    0
+
+                                </strong>
+
+                                <span>
+                                    Correct Answers
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="live-stat wrong-stat">
+
+                            <i class="bi bi-x-circle"></i>
+
+                            <div>
+
+                                <strong id="wrongCount">
+
+                                    0
+
+                                </strong>
+
+                                <span>
+                                    Wrong Answers
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- ANSWER REVIEW -->
+
+                    <div class="answer-review">
+
+                        <h4>
+                            Answer Review
+                        </h4>
+
+
+                        <div id="answerReviewList">
+
+                            <!-- JavaScript will show answers here -->
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+            </section>
+
+      <section class="feedback-section" id="feedback">
+
+  
+  
+  <!-- feedbackform -->
+  
+        <div class="feedback-header">
+        <h2>Found a Bug or Have a Suggestion?</h2>
+        <p>
+            Help us improve tobeHired. Report a bug or share an idea with us.
+        </p>
+    </div>
+
+    <form class="feedback-form" id="feedbackForm">
+
+        <div class="form-row">
+
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="Enter your name"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    required
+                >
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            <label for="type">What would you like to report?</label>
+
+            <select id="type" name="type" required>
+                <option value="">Select an option</option>
+                <option value="Bug Report">Report a Bug</option>
+                <option value="Suggestion">Suggest an Improvement</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="subject">Subject</label>
+
+            <input
+                type="text"
+                id="subject"
+                name="subject"
+                placeholder="Briefly describe the issue or suggestion"
+                required
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="message">Description</label>
+
+            <textarea
+                id="message"
+                name="message"
+                rows="6"
+                placeholder="Tell us what happened or what you would like us to improve..."
+                required
+            ></textarea>
+        </div>
+
+        <button type="submit" class="feedback-submit">
+            Submit Report
+        </button>
+
+        <p class="feedback-status" id="feedbackStatus"></p>
+
+    </form>
+
+</section>
+                        <!-- PREMIUM FOOTER -->
+                        <footer class="site-footer">
+                            <div class="container">
+                                <div class="footer-top">
+                                    <div class="footer-brand-block">
+                                        <a href="home.html" class="footer-brand">tobe<span>Hired</span></a>
+                                        <p>AI-powered preparation to help you understand, practice and improve your
+                                            interview readiness.
+                                        </p>
+                                        <div class="footer-socials">
+                                            <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                                            <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+                                            <a href="#" aria-label="GitHub"><i class="bi bi-github"></i></a>
+                                            <a href="mailto:support@tobehired.com" aria-label="Email"><i
+                                                    class="bi bi-envelope-fill"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="footer-links-group">
+                                        <h6>Quick Links</h6>
+                                        <a href="home.html#how-it-works"><i class="bi bi-arrow-right-short"></i> How it
+                                            works</a>
+                                        <a href="home.html#resume"><i class="bi bi-arrow-right-short"></i> Resume</a>
+                                        <a href="home.html#skillTests"><i class="bi bi-arrow-right-short"></i> Skill
+                                            Tests</a>
+                                        <a href="home.html#feedbackForm"><i class="bi bi-arrow-right-short"></i>
+                                            Feedback</a>
+                                    </div>
+                                    <div class="footer-links-group">
+                                        <h6>Account</h6>
+                                        <a href="profile.html"><i class="bi bi-person-circle"></i> My Profile</a>
+                                        <a href="home.html"><i class="bi bi-grid-1x2-fill"></i> Dashboard</a>
+                                        <button type="button" onclick="logout()"><i class="bi bi-box-arrow-right"></i>
+                                            Logout</button>
+                                    </div>
+                                </div>
+                                <div class="footer-bottom">
+                                    <span>© 2026 tobeHired. All rights reserved.</span>
+                                    <span><i class="bi bi-stars"></i> Built for better preparation.</span>
+                                </div>
+                            </div>
+                        </footer>
+
+
+                    </div>
+
+
+                    <!-- Bootstrap JavaScript -->
+
+                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+                    <!-- Shared logic (auth service, etc.) -->
+                    <script src="js/common.js"></script>
+
+                    <!-- Dashboard page logic -->
+                    <script src="js/dashboard.js"></script>
+
+
+
+</body>
+
+</html>
