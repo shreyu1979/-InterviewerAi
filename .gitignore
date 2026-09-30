@@ -31,3 +31,7 @@ Thumbs.db
 # OCR / test files
 eng.traineddata
 test-page-1.png
+
+# Old local project copies
+tobeHired_backend/
+tobeHired_frontend/
