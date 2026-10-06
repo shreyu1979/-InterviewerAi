@@ -4,7 +4,7 @@
    updates name + bio from the Edit Profile UI.
 ========================================= */
 
-const PROFILE_API_URL = "http://localhost:5000/api/profile";
+const PROFILE_API_URL = "https://tobehired.onrender.com/api/profile";
 
 let profileUser = null;
 

@@ -73,8 +73,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const invalidResumeMessage =
         document.getElementById("invalidResumeMessage");
 
-    const API_BASE_URL =
-        "http://localhost:5000/api";
+  const API_BASE_URL =
+    "https://tobehired.onrender.com/api";
 
 
     console.log("Resume upload system starting...");
