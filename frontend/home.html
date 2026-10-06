@@ -1190,7 +1190,7 @@
                         <div class="glass-card">
 
 
-                            <label for="resumeInput" class="upload-area">
+                            <label class="upload-area">
 
 
                                 <i class="bi bi-cloud-arrow-up"></i>
@@ -1217,7 +1217,7 @@
 
                             <!-- INVALID RESUME MESSAGE -->
 
-                            <div id="invalidResumeMessage" class="invalid-resume-message">
+                            <div id="invalidResumeMessage" class="invalid-resume-message" style="display: none;">
 
                                 <div class="invalid-icon">
 
@@ -1247,7 +1247,7 @@
 
 
 
-                            <div id="resumeResults" style="display: none !important;">
+                            <div id="resumeResults" class="resume-results-hidden">
                                 <div class="resume-analysis">
 
 
@@ -1284,26 +1284,7 @@
                                         </p>
 
 
-                                        <div class="skills-list">
-
-
-                                            <span>HTML</span>
-
-                                            <span>CSS</span>
-
-                                            <span>JavaScript</span>
-
-                                            <span>Bootstrap</span>
-
-                                            <span>Java</span>
-
-                                            <span>Git</span>
-
-                                            <span>React</span>
-
-                                            <span>SQL</span>
-
-
+                                        <div class="skills-list" id="detectedSkills">
                                         </div>
 
                                     </div>
@@ -2642,145 +2623,124 @@
 
             </section>
 
-      <section class="feedback-section" id="feedback">
+            <section class="feedback-section" id="feedback">
 
-  
-  
-  <!-- feedbackform -->
-  
-        <div class="feedback-header">
-        <h2>Found a Bug or Have a Suggestion?</h2>
-        <p>
-            Help us improve tobeHired. Report a bug or share an idea with us.
-        </p>
-    </div>
 
-    <form class="feedback-form" id="feedbackForm">
 
-        <div class="form-row">
+                <!-- feedbackform -->
 
-            <div class="form-group">
-                <label for="name">Name</label>
-                <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    placeholder="Enter your name"
-                    required
-                >
-            </div>
+                <div class="feedback-header">
+                    <h2>Found a Bug or Have a Suggestion?</h2>
+                    <p>
+                        Help us improve tobeHired. Report a bug or share an idea with us.
+                    </p>
+                </div>
 
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    placeholder="Enter your email"
-                    required
-                >
-            </div>
+                <form class="feedback-form" id="feedbackForm">
 
-        </div>
+                    <div class="form-row">
 
-        <div class="form-group">
-            <label for="type">What would you like to report?</label>
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" name="name" placeholder="Enter your name" required>
+                        </div>
 
-            <select id="type" name="type" required>
-                <option value="">Select an option</option>
-                <option value="Bug Report">Report a Bug</option>
-                <option value="Suggestion">Suggest an Improvement</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="subject">Subject</label>
-
-            <input
-                type="text"
-                id="subject"
-                name="subject"
-                placeholder="Briefly describe the issue or suggestion"
-                required
-            >
-        </div>
-
-        <div class="form-group">
-            <label for="message">Description</label>
-
-            <textarea
-                id="message"
-                name="message"
-                rows="6"
-                placeholder="Tell us what happened or what you would like us to improve..."
-                required
-            ></textarea>
-        </div>
-
-        <button type="submit" class="feedback-submit">
-            Submit Report
-        </button>
-
-        <p class="feedback-status" id="feedbackStatus"></p>
-
-    </form>
-
-</section>
-                        <!-- PREMIUM FOOTER -->
-                        <footer class="site-footer">
-                            <div class="container">
-                                <div class="footer-top">
-                                    <div class="footer-brand-block">
-                                        <a href="home.html" class="footer-brand">tobe<span>Hired</span></a>
-                                        <p>AI-powered preparation to help you understand, practice and improve your
-                                            interview readiness.
-                                        </p>
-                                        <div class="footer-socials">
-                                            <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
-                                            <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
-                                            <a href="#" aria-label="GitHub"><i class="bi bi-github"></i></a>
-                                            <a href="mailto:support@tobehired.com" aria-label="Email"><i
-                                                    class="bi bi-envelope-fill"></i></a>
-                                        </div>
-                                    </div>
-                                    <div class="footer-links-group">
-                                        <h6>Quick Links</h6>
-                                        <a href="home.html#how-it-works"><i class="bi bi-arrow-right-short"></i> How it
-                                            works</a>
-                                        <a href="home.html#resume"><i class="bi bi-arrow-right-short"></i> Resume</a>
-                                        <a href="home.html#skillTests"><i class="bi bi-arrow-right-short"></i> Skill
-                                            Tests</a>
-                                        <a href="home.html#feedbackForm"><i class="bi bi-arrow-right-short"></i>
-                                            Feedback</a>
-                                    </div>
-                                    <div class="footer-links-group">
-                                        <h6>Account</h6>
-                                        <a href="profile.html"><i class="bi bi-person-circle"></i> My Profile</a>
-                                        <a href="home.html"><i class="bi bi-grid-1x2-fill"></i> Dashboard</a>
-                                        <button type="button" onclick="logout()"><i class="bi bi-box-arrow-right"></i>
-                                            Logout</button>
-                                    </div>
-                                </div>
-                                <div class="footer-bottom">
-                                    <span>© 2026 tobeHired. All rights reserved.</span>
-                                    <span><i class="bi bi-stars"></i> Built for better preparation.</span>
-                                </div>
-                            </div>
-                        </footer>
-
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                        </div>
 
                     </div>
 
+                    <div class="form-group">
+                        <label for="type">What would you like to report?</label>
 
-                    <!-- Bootstrap JavaScript -->
+                        <select id="type" name="type" required>
+                            <option value="">Select an option</option>
+                            <option value="Bug Report">Report a Bug</option>
+                            <option value="Suggestion">Suggest an Improvement</option>
+                        </select>
+                    </div>
 
-                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
 
-                    <!-- Shared logic (auth service, etc.) -->
-                    <script src="js/common.js"></script>
+                        <input type="text" id="subject" name="subject"
+                            placeholder="Briefly describe the issue or suggestion" required>
+                    </div>
 
-                    <!-- Dashboard page logic -->
-                    <script src="js/dashboard.js"></script>
+                    <div class="form-group">
+                        <label for="message">Description</label>
+
+                        <textarea id="message" name="message" rows="6"
+                            placeholder="Tell us what happened or what you would like us to improve..."
+                            required></textarea>
+                    </div>
+
+                    <button type="submit" class="feedback-submit">
+                        Submit Report
+                    </button>
+
+                    <p class="feedback-status" id="feedbackStatus"></p>
+
+                </form>
+
+            </section>
+            <!-- PREMIUM FOOTER -->
+            <footer class="site-footer">
+                <div class="container">
+                    <div class="footer-top">
+                        <div class="footer-brand-block">
+                            <a href="home.html" class="footer-brand">tobe<span>Hired</span></a>
+                            <p>AI-powered preparation to help you understand, practice and improve your
+                                interview readiness.
+                            </p>
+                            <div class="footer-socials">
+                                <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                                <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+                                <a href="#" aria-label="GitHub"><i class="bi bi-github"></i></a>
+                                <a href="mailto:support@tobehired.com" aria-label="Email"><i
+                                        class="bi bi-envelope-fill"></i></a>
+                            </div>
+                        </div>
+                        <div class="footer-links-group">
+                            <h6>Quick Links</h6>
+                            <a href="home.html#how-it-works"><i class="bi bi-arrow-right-short"></i> How it
+                                works</a>
+                            <a href="home.html#resume"><i class="bi bi-arrow-right-short"></i> Resume</a>
+                            <a href="home.html#skillTests"><i class="bi bi-arrow-right-short"></i> Skill
+                                Tests</a>
+                            <a href="home.html#feedbackForm"><i class="bi bi-arrow-right-short"></i>
+                                Feedback</a>
+                        </div>
+                        <div class="footer-links-group">
+                            <h6>Account</h6>
+                            <a href="profile.html"><i class="bi bi-person-circle"></i> My Profile</a>
+                            <a href="home.html"><i class="bi bi-grid-1x2-fill"></i> Dashboard</a>
+                            <button type="button" onclick="logout()"><i class="bi bi-box-arrow-right"></i>
+                                Logout</button>
+                        </div>
+                    </div>
+                    <div class="footer-bottom">
+                        <span>© 2026 tobeHired. All rights reserved.</span>
+                        <span><i class="bi bi-stars"></i> Built for better preparation.</span>
+                    </div>
+                </div>
+            </footer>
+
+
+    </div>
+
+
+    <!-- Bootstrap JavaScript -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Shared logic (auth service, etc.) -->
+    <script src="js/common.js"></script>
+
+    <!-- Dashboard page logic -->
+    <script src="js/dashboard.js"></script>
 
 
 

@@ -1196,9 +1196,9 @@ footer {
 
 }
 
-/* #resumeResults {
-    display: none !important;
-} */
+#resumeResults {
+    display: block;
+} 
 
 
 /* =========================================
@@ -3515,7 +3515,7 @@ footer {
             #6e91e9,
             #806de8,
             #aa7ff1);
-
+    background-clip: text;
     -webkit-background-clip: text;
 
     -webkit-text-fill-color: transparent;
@@ -8172,4 +8172,68 @@ body.profile-modal-open {
     .feedback-header h2 {
         font-size: 26px;
     }
+}
+
+#resumeResults.resume-results-hidden {
+    display: none;
+}
+
+#resumeResults.resume-results-visible {
+    display: block !important;
+}
+
+#resumeResults[data-analysis-shown="true"] {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+#resumeResults.resume-results-visible {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+#detectedSkills {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+#detectedSkills span {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* =========================================================
+   RESUME ANALYSIS - FINAL VISIBILITY FIX
+========================================================= */
+
+#resumeResults.resume-results-hidden {
+    display: none !important;
+}
+
+#resumeResults.resume-results-visible,
+#resumeResults[data-analysis-shown="true"] {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+#detectedSkills {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 10px !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+#detectedSkills span {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
 }

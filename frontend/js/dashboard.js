@@ -1,7 +1,21 @@
 /* =========================================================
    DASHBOARD.JS
    tobeHired Dashboard
+   FLASHING FIXED
 ========================================================= */
+
+console.log("🔥 DASHBOARD.JS LOADED");
+
+
+/* =========================================================
+   GLOBAL TEST VARIABLES
+========================================================= */
+
+let javascriptQuestions = [];
+let currentTestSkill = null;
+let currentQuestion = 0;
+let selectedAnswer = null;
+let userAnswers = [];
 
 
 /* =========================================================
@@ -59,17 +73,16 @@ document.addEventListener("DOMContentLoaded", function () {
     const invalidResumeMessage =
         document.getElementById("invalidResumeMessage");
 
-    const uploadAgainBtn =
-        document.getElementById("uploadAgainBtn");
-
     const API_BASE_URL =
         "http://localhost:5000/api";
 
 
-    console.log(
-        "Resume upload system starting..."
-    );
+    console.log("Resume upload system starting...");
 
+
+    /* =====================================================
+       REQUIRED ELEMENT CHECK
+    ===================================================== */
 
     if (!resumeInput) {
 
@@ -101,15 +114,37 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* -----------------------------------------
-       INITIAL STATE
-    ----------------------------------------- */
+    /* =====================================================
+       INITIAL RESUME STATE
 
-    resumeResults.style.setProperty(
-        "display",
-        "none",
-        "important"
+       IMPORTANT:
+       Do NOT use setInterval.
+       Do NOT continuously force display.
+    ===================================================== */
+
+    resumeResults.dataset.analysisShown =
+        "false";
+
+    resumeResults.classList.add(
+        "resume-results-hidden"
     );
+
+    resumeResults.classList.remove(
+        "resume-results-visible"
+    );
+
+    resumeResults.style.removeProperty(
+        "display"
+    );
+
+    resumeResults.style.removeProperty(
+        "visibility"
+    );
+
+    resumeResults.style.removeProperty(
+        "opacity"
+    );
+
 
     invalidResumeMessage.style.setProperty(
         "display",
@@ -119,16 +154,192 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     /* =====================================================
+       RESUME FORM PROTECTION
+    ===================================================== */
+
+    const resumeForm =
+        resumeInput.closest("form");
+
+
+    if (resumeForm) {
+
+        resumeForm.addEventListener(
+            "submit",
+            function (event) {
+
+                event.preventDefault();
+                event.stopImmediatePropagation();
+
+                console.log(
+                    "🛑 RESUME FORM SUBMIT BLOCKED"
+                );
+
+            },
+            true
+        );
+
+
+        resumeForm.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (event.key === "Enter") {
+
+                    event.preventDefault();
+
+                }
+
+            },
+            true
+        );
+
+    }
+
+
+    /* =====================================================
+       SHOW RESUME RESULTS
+
+       Only called AFTER analysis content is rendered.
+    ===================================================== */
+
+    function showResumeResults() {
+
+        if (!resumeResults) {
+            return;
+        }
+
+
+        /*
+         * Remove hidden state.
+         */
+
+        resumeResults.classList.remove(
+            "resume-results-hidden"
+        );
+
+
+        /*
+         * Add visible state.
+         */
+
+        resumeResults.classList.add(
+            "resume-results-visible"
+        );
+
+
+        /*
+         * Mark analysis as successfully shown.
+         */
+
+        resumeResults.dataset.analysisShown =
+            "true";
+
+
+        /*
+         * These are applied ONCE.
+         * No interval.
+         */
+
+        resumeResults.style.setProperty(
+            "display",
+            "block",
+            "important"
+        );
+
+
+        resumeResults.style.setProperty(
+            "visibility",
+            "visible",
+            "important"
+        );
+
+
+        resumeResults.style.setProperty(
+            "opacity",
+            "1",
+            "important"
+        );
+
+
+        console.log(
+            "✅ Resume results shown ONCE"
+        );
+
+    }
+
+
+    /* =====================================================
+       HIDE RESUME RESULTS
+    ===================================================== */
+
+    function hideResumeResults() {
+
+        if (!resumeResults) {
+            return;
+        }
+
+
+        resumeResults.dataset.analysisShown =
+            "false";
+
+
+        resumeResults.classList.remove(
+            "resume-results-visible"
+        );
+
+
+        resumeResults.classList.add(
+            "resume-results-hidden"
+        );
+
+
+        resumeResults.style.setProperty(
+            "display",
+            "none",
+            "important"
+        );
+
+
+        resumeResults.style.setProperty(
+            "visibility",
+            "hidden",
+            "important"
+        );
+
+
+        resumeResults.style.setProperty(
+            "opacity",
+            "0",
+            "important"
+        );
+
+    }
+
+
+    /* =====================================================
        SHOW RESUME ERROR
     ===================================================== */
 
-    function showResumeError(title, message) {
+    function showResumeError(
+        title,
+        message
+    ) {
 
-        resumeResults.style.display =
-            "none";
+        console.warn(
+            "Showing resume error:",
+            title,
+            message
+        );
 
-        invalidResumeMessage.style.display =
-            "block";
+
+        hideResumeResults();
+
+
+        invalidResumeMessage.style.setProperty(
+            "display",
+            "block",
+            "important"
+        );
 
 
         invalidResumeMessage.innerHTML = `
@@ -167,11 +378,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
             newUploadButton.addEventListener(
                 "click",
-                function () {
+                function (event) {
+
+                    event.preventDefault();
+                    event.stopPropagation();
+
 
                     resumeInput.value = "";
 
-                    resumeInput.click();
+
+                    setTimeout(
+                        function () {
+
+                            resumeInput.click();
+
+                        },
+                        50
+                    );
 
                 }
             );
@@ -182,85 +405,341 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     /* =====================================================
+       NORMALIZE SKILLS
+    ===================================================== */
+
+    function normalizeSkills(value) {
+
+        const result = [];
+
+
+        function collect(item) {
+
+            if (
+                item === null ||
+                item === undefined
+            ) {
+
+                return;
+
+            }
+
+
+            if (Array.isArray(item)) {
+
+                item.forEach(collect);
+
+                return;
+
+            }
+
+
+            if (typeof item === "string") {
+
+                const text =
+                    item.trim();
+
+
+                if (!text) {
+
+                    return;
+
+                }
+
+
+                /*
+                 * Backend may return JSON string.
+                 */
+
+                if (
+                    (
+                        text.startsWith("[") &&
+                        text.endsWith("]")
+                    ) ||
+                    (
+                        text.startsWith("{") &&
+                        text.endsWith("}")
+                    )
+                ) {
+
+                    try {
+
+                        collect(
+                            JSON.parse(text)
+                        );
+
+                        return;
+
+                    }
+
+                    catch (error) {
+
+                        console.warn(
+                            "Could not parse skill JSON:",
+                            error
+                        );
+
+                    }
+
+                }
+
+
+                text
+                    .split(/[,;\n|]+/)
+                    .forEach(
+                        function (part) {
+
+                            const clean =
+                                part.trim();
+
+
+                            if (clean) {
+
+                                result.push(
+                                    clean
+                                );
+
+                            }
+
+                        }
+                    );
+
+
+                return;
+
+            }
+
+
+            if (typeof item === "number") {
+
+                result.push(
+                    String(item)
+                );
+
+                return;
+
+            }
+
+
+            if (typeof item === "object") {
+
+                const name =
+                    item.name ||
+                    item.skill ||
+                    item.label ||
+                    item.title;
+
+
+                if (typeof name === "string") {
+
+                    collect(name);
+
+                    return;
+
+                }
+
+
+                Object.keys(item).forEach(
+                    function (key) {
+
+                        collect(
+                            item[key]
+                        );
+
+                    }
+                );
+
+            }
+
+        }
+
+
+        collect(value);
+
+
+        /*
+         * Remove duplicates.
+         */
+
+        return result.filter(
+            function (skill, index) {
+
+                return (
+                    result.findIndex(
+                        function (other) {
+
+                            return (
+                                other.toLowerCase() ===
+                                skill.toLowerCase()
+                            );
+
+                        }
+                    ) === index
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       NORMALIZE LIST DATA
+    ===================================================== */
+
+    function normalizeList(value) {
+
+        if (
+            value === null ||
+            value === undefined
+        ) {
+
+            return [];
+
+        }
+
+
+        if (Array.isArray(value)) {
+
+            return value;
+
+        }
+
+
+        if (typeof value === "string") {
+
+            const text =
+                value.trim();
+
+
+            if (!text) {
+
+                return [];
+
+            }
+
+
+            try {
+
+                const parsed =
+                    JSON.parse(text);
+
+
+                if (Array.isArray(parsed)) {
+
+                    return parsed;
+
+                }
+
+
+                return [parsed];
+
+            }
+
+            catch (error) {
+
+                return [text];
+
+            }
+
+        }
+
+
+        return [value];
+
+    }
+
+
+    /* =====================================================
        DISPLAY RESUME ANALYSIS
     ===================================================== */
 
-    function displayAnalysis(analysisResponse) {
+    function displayAnalysis(
+        analysisResponse
+    ) {
 
         console.log(
-            "================================="
+            "🔥🔥 displayAnalysis() STARTED"
         );
 
-        console.log(
-            "DISPLAYING RESUME ANALYSIS"
-        );
 
         console.log(
-            "================================="
-        );
-
-        console.log(
-            "Raw response:",
+            "🔥 ANALYSIS RESPONSE:",
             analysisResponse
         );
 
+
+        /* =================================================
+           UNWRAP BACKEND RESPONSE
+        ================================================= */
 
         let analysis =
             analysisResponse;
 
 
-        /*
-            Backend can return:
+        const wrapperKeys = [
+            "analysis",
+            "data",
+            "result",
+            "resume_analysis",
+            "resumeAnalysis"
+        ];
 
-            {
-                success: true,
-                analysis: {...}
+
+        for (let i = 0; i < 5; i++) {
+
+            if (
+                !analysis ||
+                typeof analysis !== "object" ||
+                Array.isArray(analysis)
+            ) {
+
+                break;
+
             }
 
-            OR
 
-            {
-                success: true,
-                skills: [...]
+            const wrapperKey =
+                wrapperKeys.find(
+                    function (key) {
+
+                        return (
+                            analysis[key] &&
+                            typeof analysis[key] === "object"
+                        );
+
+                    }
+                );
+
+
+            if (!wrapperKey) {
+
+                break;
+
             }
-        */
 
-        if (
-            analysisResponse &&
-            analysisResponse.analysis
-        ) {
 
             analysis =
-                analysisResponse.analysis;
+                analysis[wrapperKey];
 
         }
 
 
-        if (!analysis) {
+        if (
+            !analysis ||
+            typeof analysis !== "object"
+        ) {
 
-            console.error(
-                "No analysis object received."
+            throw new Error(
+                "No valid analysis object received."
             );
 
-            return;
-
         }
 
 
-        /* -----------------------------------------
-           SHOW RESULT
-        ----------------------------------------- */
-
-        resumeResults.style.setProperty(
-            "display",
-            "block",
-            "important"
-        );
-
-        invalidResumeMessage.style.setProperty(
-            "display",
-            "none",
-            "important"
+        console.log(
+            "🔥 FINAL ANALYSIS OBJECT:",
+            analysis
         );
 
 
@@ -268,32 +747,30 @@ document.addEventListener("DOMContentLoaded", function () {
            GET SKILLS
         ================================================= */
 
-        let skills =
-            analysis.skills;
+        const rawSkills =
+            analysis.skills !== undefined
+
+                ? analysis.skills
+
+                : (
+                    analysis.detected_skills !== undefined
+
+                        ? analysis.detected_skills
+
+                        : (
+                            analysis.detectedSkills !== undefined
+
+                                ? analysis.detectedSkills
+
+                                : analysis.skill_list
+                        )
+                );
 
 
-        if (typeof skills === "string") {
-
-            try {
-
-                skills =
-                    JSON.parse(skills);
-
-            } catch (error) {
-
-                skills =
-                    [skills];
-
-            }
-
-        }
-
-
-        if (!Array.isArray(skills)) {
-
-            skills = [];
-
-        }
+        const skills =
+            normalizeSkills(
+                rawSkills
+            );
 
 
         console.log(
@@ -308,7 +785,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const skillsList =
             resumeResults.querySelector(
-                ".skills-list"
+                "#detectedSkills"
             );
 
 
@@ -319,29 +796,39 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (skills.length > 0) {
 
-                skills.forEach(function (skill) {
+                skills.forEach(
+                    function (skill) {
 
-                    const skillElement =
-                        document.createElement("span");
+                        const skillElement =
+                            document.createElement(
+                                "span"
+                            );
 
-                    skillElement.innerText =
-                        skill;
 
-                    skillsList.appendChild(
-                        skillElement
-                    );
+                        skillElement.innerText =
+                            String(skill);
 
-                });
+
+                        skillsList.appendChild(
+                            skillElement
+                        );
+
+                    }
+                );
 
             }
 
             else {
 
                 const noSkills =
-                    document.createElement("span");
+                    document.createElement(
+                        "span"
+                    );
+
 
                 noSkills.innerText =
                     "No specific skills detected";
+
 
                 skillsList.appendChild(
                     noSkills
@@ -350,6 +837,22 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
         }
+
+        else {
+
+            console.warn(
+                "#detectedSkills was not found."
+            );
+
+        }
+
+
+        console.log(
+            "🔥 AFTER SKILLS RENDER:",
+            skillsList
+                ? skillsList.innerHTML
+                : "NOT FOUND"
+        );
 
 
         /* =================================================
@@ -367,12 +870,13 @@ document.addEventListener("DOMContentLoaded", function () {
             testSkills.innerHTML = "";
 
 
-            if (skills.length > 0) {
-
-                skills.forEach(function (skill) {
+            skills.forEach(
+                function (skill) {
 
                     const skillElement =
-                        document.createElement("span");
+                        document.createElement(
+                            "span"
+                        );
 
 
                     skillElement.innerText =
@@ -392,14 +896,13 @@ document.addEventListener("DOMContentLoaded", function () {
                         skill.trim();
 
 
-                    /*
-                        Clicking detected skill
-                        selects that skill.
-                    */
-
                     skillElement.addEventListener(
                         "click",
-                        function () {
+                        function (event) {
+
+                            event.preventDefault();
+                            event.stopPropagation();
+
 
                             currentTestSkill =
                                 skill.trim();
@@ -439,9 +942,8 @@ document.addEventListener("DOMContentLoaded", function () {
                         skillElement
                     );
 
-                });
-
-            }
+                }
+            );
 
         }
 
@@ -450,25 +952,10 @@ document.addEventListener("DOMContentLoaded", function () {
            EDUCATION
         ================================================= */
 
-        let education =
-            analysis.education;
-
-
-        if (typeof education === "string") {
-
-            try {
-
-                education =
-                    JSON.parse(education);
-
-            } catch (error) {
-
-                education =
-                    [education];
-
-            }
-
-        }
+        const education =
+            normalizeList(
+                analysis.education
+            );
 
 
         const educationList =
@@ -482,24 +969,36 @@ document.addEventListener("DOMContentLoaded", function () {
             educationList.innerHTML = "";
 
 
-            if (
-                Array.isArray(education) &&
-                education.length > 0
-            ) {
+            if (education.length > 0) {
 
-                education.forEach(function (item) {
+                education.forEach(
+                    function (item) {
 
-                    const element =
-                        document.createElement("span");
+                        const element =
+                            document.createElement(
+                                "span"
+                            );
 
-                    element.innerText =
-                        item;
 
-                    educationList.appendChild(
-                        element
-                    );
+                        element.innerText =
+                            typeof item === "object"
 
-                });
+                                ? (
+                                    item.name ||
+                                    item.degree ||
+                                    item.title ||
+                                    JSON.stringify(item)
+                                )
+
+                                : String(item);
+
+
+                        educationList.appendChild(
+                            element
+                        );
+
+                    }
+                );
 
             }
 
@@ -517,25 +1016,10 @@ document.addEventListener("DOMContentLoaded", function () {
            QUALIFICATION
         ================================================= */
 
-        let qualification =
-            analysis.qualification;
-
-
-        if (typeof qualification === "string") {
-
-            try {
-
-                qualification =
-                    JSON.parse(qualification);
-
-            } catch (error) {
-
-                qualification =
-                    [qualification];
-
-            }
-
-        }
+        const qualification =
+            normalizeList(
+                analysis.qualification
+            );
 
 
         const qualificationList =
@@ -549,19 +1033,29 @@ document.addEventListener("DOMContentLoaded", function () {
             qualificationList.innerHTML = "";
 
 
-            if (
-                Array.isArray(qualification) &&
-                qualification.length > 0
-            ) {
+            if (qualification.length > 0) {
 
                 qualification.forEach(
                     function (item) {
 
                         const element =
-                            document.createElement("span");
+                            document.createElement(
+                                "span"
+                            );
+
 
                         element.innerText =
-                            item;
+                            typeof item === "object"
+
+                                ? (
+                                    item.name ||
+                                    item.degree ||
+                                    item.title ||
+                                    JSON.stringify(item)
+                                )
+
+                                : String(item);
+
 
                         qualificationList.appendChild(
                             element
@@ -583,31 +1077,72 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
         /* =================================================
-           FINAL DISPLAY
+           SHOW RESULTS ONLY AFTER EVERYTHING
+           HAS BEEN RENDERED
         ================================================= */
 
-        resumeResults.style.display =
-            "block";
+        showResumeResults();
 
 
-        void resumeResults.offsetHeight;
+        console.log(
+            "✅ Resume analysis forced visible ONCE"
+        );
 
 
-        setTimeout(function () {
+        /* =================================================
+           FINAL VERIFICATION
+        ================================================= */
 
-            resumeResults.scrollIntoView({
+        console.log(
+            "🟢 SHOWING resumeResults"
+        );
 
-                behavior: "smooth",
 
-                block: "start"
+        console.log(
+            "resumeResults classes:",
+            resumeResults.className
+        );
 
-            });
 
-        }, 200);
+        console.log(
+            "resumeResults style:",
+            resumeResults.getAttribute(
+                "style"
+            )
+        );
+
+
+        console.log(
+            "resumeResults computed display:",
+            getComputedStyle(
+                resumeResults
+            ).display
+        );
+
+
+        console.log(
+            "resumeResults computed visibility:",
+            getComputedStyle(
+                resumeResults
+            ).visibility
+        );
+
+
+        console.log(
+            "skills currently rendered:",
+            resumeResults.querySelectorAll(
+                "#detectedSkills span"
+            ).length
+        );
 
 
         console.log(
             "Resume analysis displayed successfully."
+        );
+
+
+        console.log(
+            "🚨 RESUME DISPLAY COMPLETE"
         );
 
     }
@@ -619,6 +1154,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     async function uploadAndAnalyzeResume(file) {
 
+        let analysisDisplayed =
+            false;
+
+
         try {
 
             console.log(
@@ -626,6 +1165,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 file.name
             );
 
+
+            /* =================================================
+               AUTH
+            ================================================= */
 
             if (
                 typeof authService ===
@@ -652,6 +1195,10 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
 
+            /* =================================================
+               FORM DATA
+            ================================================= */
+
             const formData =
                 new FormData();
 
@@ -668,9 +1215,14 @@ document.addEventListener("DOMContentLoaded", function () {
             );
 
 
-            /* -----------------------------------------
+            /* =================================================
                UPLOAD
-            ----------------------------------------- */
+            ================================================= */
+
+            console.log(
+                "📤 Sending resume to upload API..."
+            );
+
 
             const uploadResponse =
                 await fetch(
@@ -715,9 +1267,20 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
 
-            /* -----------------------------------------
+            console.log(
+                "✅ Resume ID:",
+                resumeId
+            );
+
+
+            /* =================================================
                ANALYZE
-            ----------------------------------------- */
+            ================================================= */
+
+            console.log(
+                "🤖 Sending resume for AI analysis..."
+            );
+
 
             const analyzeResponse =
                 await fetch(
@@ -761,42 +1324,66 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
 
-            if (analyzeData.analysis) {
+            console.log(
+                "🔥 FRONTEND ANALYZE RESPONSE:",
+                analyzeData
+            );
 
-                displayAnalysis(
-                    analyzeData.analysis
-                );
 
-            }
+            /* =================================================
+               DISPLAY ANALYSIS
+            ================================================= */
 
-            else {
+            displayAnalysis(
+                analyzeData
+            );
 
-                displayAnalysis(
-                    analyzeData
-                );
 
-            }
+            analysisDisplayed =
+                true;
 
 
             console.log(
-                "Resume uploaded and analyzed successfully."
+                "✅ displayAnalysis FINISHED"
+            );
+
+
+            console.log(
+                "🎉 Resume uploaded and analyzed successfully."
             );
 
         }
 
+
         catch (error) {
 
             console.error(
-                "RESUME UPLOAD ERROR:",
+                "❌ RESUME UPLOAD ERROR:",
                 error
             );
 
 
-            showResumeError(
-                "Resume Processing Failed",
-                error.message ||
-                "Unable to process your resume. Please try again."
-            );
+            /*
+             * Never replace successful analysis
+             * with an error.
+             */
+
+            if (!analysisDisplayed) {
+
+                if (
+                    resumeResults.dataset.analysisShown !==
+                    "true"
+                ) {
+
+                    showResumeError(
+                        "Resume Processing Failed",
+                        error.message ||
+                        "Unable to process your resume. Please try again."
+                    );
+
+                }
+
+            }
 
         }
 
@@ -809,13 +1396,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
     resumeInput.addEventListener(
         "change",
-        async function () {
+        async function (event) {
+
+            console.log(
+                "🔥🔥 RESUME INPUT CHANGE EVENT FIRED 🔥🔥"
+            );
+
+
+            event.stopPropagation();
+
 
             const file =
+                this.files &&
                 this.files[0];
 
 
             if (!file) {
+
+                console.log(
+                    "No file selected."
+                );
 
                 return;
 
@@ -823,18 +1423,47 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
             console.log(
-                "Selected file:",
+                "🔥 FILE SELECTED:",
                 file.name
             );
 
 
-            /* -----------------------------------------
+            console.log(
+                "🔥 FILE SIZE:",
+                file.size
+            );
+
+
+            console.log(
+                "🔥 FILE TYPE:",
+                file.type
+            );
+
+
+            /* =================================================
+               RESET PREVIOUS RESULT STATE
+            ================================================= */
+
+            resumeResults.dataset.analysisShown =
+                "false";
+
+
+            invalidResumeMessage.style.setProperty(
+                "display",
+                "none",
+                "important"
+            );
+
+
+            hideResumeResults();
+
+
+            /* =================================================
                PDF VALIDATION
-            ----------------------------------------- */
+            ================================================= */
 
             const isPDF =
-                file.type ===
-                "application/pdf" ||
+                file.type === "application/pdf" ||
                 file.name
                     .toLowerCase()
                     .endsWith(".pdf");
@@ -850,15 +1479,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 this.value = "";
 
-
                 return;
 
             }
 
 
-            /* -----------------------------------------
+            /* =================================================
                5 MB LIMIT
-            ----------------------------------------- */
+            ================================================= */
 
             const maxSize =
                 5 * 1024 * 1024;
@@ -874,33 +1502,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 this.value = "";
 
-
                 return;
 
             }
 
 
-            /* -----------------------------------------
-               HIDE OLD RESULT
-            ----------------------------------------- */
-
-            invalidResumeMessage.style.setProperty(
-                "display",
-                "none",
-                "important"
-            );
-
-
-            resumeResults.style.setProperty(
-                "display",
-                "none",
-                "important"
-            );
-
-
-            /* -----------------------------------------
+            /* =================================================
                PROCESS
-            ----------------------------------------- */
+            ================================================= */
+
+            console.log(
+                "🚀 Starting resume processing..."
+            );
+
 
             await uploadAndAnalyzeResume(
                 file
@@ -910,343 +1524,73 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 
 
-    /* =====================================================
-       UPLOAD AGAIN
-    ===================================================== */
+    /* =========================================================
+       3. TEST ELEMENTS
+    ========================================================= */
 
-    if (uploadAgainBtn) {
-
-        uploadAgainBtn.addEventListener(
-            "click",
-            function () {
-
-                resumeInput.value = "";
-
-                resumeInput.click();
-
-            }
+    const questionText =
+        document.getElementById(
+            "questionText"
         );
 
-    }
 
-});
-
-
-/* =========================================================
-   3. TEST VARIABLES
-========================================================= */
-
-let javascriptQuestions = [];
-
-let currentTestSkill = null;
-
-let currentQuestion = 0;
-
-let selectedAnswer = null;
-
-let userAnswers = [];
-
-
-/* =========================================================
-   4. TEST ELEMENTS
-========================================================= */
-
-const questionText =
-    document.getElementById(
-        "questionText"
-    );
-
-const liveOptions =
-    document.getElementById(
-        "liveOptions"
-    );
-
-const questionNumber =
-    document.getElementById(
-        "questionNumber"
-    );
-
-const liveProgress =
-    document.getElementById(
-        "liveProgress"
-    );
-
-const nextQuestionBtn =
-    document.getElementById(
-        "nextQuestionBtn"
-    );
-
-const answerMessage =
-    document.getElementById(
-        "answerMessage"
-    );
-
-const liveTestBox =
-    document.getElementById(
-        "liveTestBox"
-    );
-
-const liveResultBox =
-    document.getElementById(
-        "liveResultBox"
-    );
-
-
-/* =========================================================
-   5. SHOW QUESTION
-========================================================= */
-
-function showQuestion() {
-
-    if (
-        !questionText ||
-        !liveOptions ||
-        !questionNumber ||
-        !liveProgress
-    ) {
-
-        console.warn(
-            "Live test elements were not found."
+    const liveOptions =
+        document.getElementById(
+            "liveOptions"
         );
 
-        return;
 
-    }
-
-
-    if (
-        !javascriptQuestions ||
-        javascriptQuestions.length === 0
-    ) {
-
-        console.warn(
-            "No questions available."
+    const questionNumber =
+        document.getElementById(
+            "questionNumber"
         );
 
-        return;
 
-    }
-
-    
-
-
-    const current =
-        javascriptQuestions[
-        currentQuestion
-        ];
+    const liveProgress =
+        document.getElementById(
+            "liveProgress"
+        );
 
 
-    if (!current) {
-
-        return;
-
-    }
-
-
-    questionText.innerText =
-        current.question;
+    const nextQuestionBtn =
+        document.getElementById(
+            "nextQuestionBtn"
+        );
 
 
-    questionNumber.innerText =
-        currentQuestion + 1;
+    const answerMessage =
+        document.getElementById(
+            "answerMessage"
+        );
 
 
-    liveProgress.style.width =
-        (
-            (
-                (currentQuestion + 1) /
-                javascriptQuestions.length
-            ) * 100
-        ) + "%";
+    const liveTestBox =
+        document.getElementById(
+            "liveTestBox"
+        );
 
 
-    liveOptions.innerHTML =
-        "";
+    const liveResultBox =
+        document.getElementById(
+            "liveResultBox"
+        );
 
 
-    selectedAnswer =
-        null;
+    /* =========================================================
+       4. SHOW QUESTION
+    ========================================================= */
 
-
-    if (answerMessage) {
-
-        answerMessage.innerText =
-            "Select an answer to continue";
-
-    }
-
-
-    const letters = [
-        "A",
-        "B",
-        "C",
-        "D"
-    ];
-
-
-    current.options.forEach(
-        function (option, index) {
-
-            const optionElement =
-                document.createElement("div");
-
-
-            optionElement.classList.add(
-                "live-option"
-            );
-
-
-            optionElement.innerHTML = `
-
-                <span class="live-option-letter">
-
-                    ${letters[index]}
-
-                </span>
-
-                <span>
-
-                    ${option}
-
-                </span>
-
-            `;
-
-
-            optionElement.addEventListener(
-                "click",
-                function () {
-
-                    document
-                        .querySelectorAll(
-                            ".live-option"
-                        )
-                        .forEach(
-                            function (item) {
-
-                                item.classList.remove(
-                                    "selected"
-                                );
-
-                            }
-                        );
-
-
-                    optionElement.classList.add(
-                        "selected"
-                    );
-
-
-                    selectedAnswer =
-                        index;
-
-
-                    if (answerMessage) {
-
-                        answerMessage.innerText =
-                            "Answer selected";
-
-                    }
-
-                }
-            );
-
-
-            liveOptions.appendChild(
-                optionElement
-            );
-
-        }
-    );
-
-
-    if (nextQuestionBtn) {
+    function showQuestion() {
 
         if (
-            currentQuestion ===
-            javascriptQuestions.length - 1
+            !questionText ||
+            !liveOptions ||
+            !questionNumber ||
+            !liveProgress
         ) {
 
-            nextQuestionBtn.innerHTML = `
-
-                Submit Test
-
-                <i class="bi bi-check-lg"></i>
-
-            `;
-
-        }
-
-        else {
-
-            nextQuestionBtn.innerHTML = `
-
-                Next Question
-
-                <i class="bi bi-arrow-right"></i>
-
-            `;
-
-        }
-
-    }
-
-}
-
-
-/* =========================================================
-   6. START TEST FOR ANY SKILL
-========================================================= */
-
-async function startSkillTest(skill) {
-
-    if (!skill) {
-
-        console.error(
-            "No skill supplied."
-        );
-
-        return;
-
-    }
-
-
-    try {
-
-        currentTestSkill =
-            skill.trim();
-
-
-        console.log(
-            "Starting test for:",
-            currentTestSkill
-        );
-
-
-        const response =
-            await fetch(
-                `http://localhost:5000/api/questions/random?skill=${encodeURIComponent(currentTestSkill)}&limit=20`
-            );
-
-
-        const data =
-            await response.json();
-
-
-        console.log(
-            "Questions API response:",
-            data
-        );
-
-
-        if (
-            !data.success ||
-            !data.questions ||
-            data.questions.length === 0
-        ) {
-
-            alert(
-                `No questions found for ${currentTestSkill}.`
+            console.warn(
+                "Live test elements were not found."
             );
 
             return;
@@ -1254,379 +1598,224 @@ async function startSkillTest(skill) {
         }
 
 
-        /* -----------------------------------------
-           CONVERT QUESTIONS
-        ----------------------------------------- */
+        if (
+            !javascriptQuestions ||
+            javascriptQuestions.length === 0
+        ) {
 
-        javascriptQuestions =
-            data.questions.map(
-                function (question) {
-
-                    return {
-
-                        id:
-                            question.id,
-
-                        question:
-                            question.question,
-
-                        options: [
-
-                            question.option_a,
-
-                            question.option_b,
-
-                            question.option_c,
-
-                            question.option_d
-
-                        ],
-
-                        correct:
-                            [
-                                "A",
-                                "B",
-                                "C",
-                                "D"
-                            ].indexOf(
-                                String(
-                                    question.correct_answer
-                                ).trim().toUpperCase()
-                            )
-
-                    };
-
-                }
+            console.warn(
+                "No questions available."
             );
 
+            return;
 
-        /* -----------------------------------------
-           RESET TEST
-        ----------------------------------------- */
+        }
 
-        currentQuestion =
-            0;
+
+        const current =
+            javascriptQuestions[
+                currentQuestion
+            ];
+
+
+        if (!current) {
+
+            return;
+
+        }
+
+
+        questionText.innerText =
+            current.question;
+
+
+        questionNumber.innerText =
+            currentQuestion + 1;
+
+
+        liveProgress.style.width =
+            (
+                (
+                    (currentQuestion + 1) /
+                    javascriptQuestions.length
+                ) * 100
+            ) + "%";
+
+
+        liveOptions.innerHTML =
+            "";
+
 
         selectedAnswer =
             null;
 
-        userAnswers =
-            [];
 
+        if (answerMessage) {
 
-        /* -----------------------------------------
-           HIDE RESULT
-        ----------------------------------------- */
-
-        if (liveResultBox) {
-
-            liveResultBox.style.display =
-                "none";
+            answerMessage.innerText =
+                "Select an answer to continue";
 
         }
 
 
-        /* -----------------------------------------
-           SHOW TEST
-        ----------------------------------------- */
-
-        if (liveTestBox) {
-
-            liveTestBox.style.display =
-                "block";
-
-        }
+        const letters = [
+            "A",
+            "B",
+            "C",
+            "D"
+        ];
 
 
-        /* -----------------------------------------
-           SHOW QUESTION
-        ----------------------------------------- */
-
-        showQuestion();
-
-
-        /* -----------------------------------------
-           SCROLL
-        ----------------------------------------- */
-
-        if (liveTestBox) {
-
-            liveTestBox.scrollIntoView({
-
-                behavior: "smooth",
-
-                block: "start"
-
-            });
-
-        }
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Skill test error:",
-            error
-        );
+        const options =
+            Array.isArray(current.options)
+                ? current.options
+                : [];
 
 
-        alert(
-            "Unable to load questions. Please try again."
-        );
+        options.forEach(
+            function (option, index) {
 
-    }
-
-}
-
-
-/* =========================================================
-   7. SKILL CARD CLICK
-========================================================= */
-
-const skillCards =
-    document.querySelectorAll(
-        ".test-skill-card"
-    );
+                const optionElement =
+                    document.createElement(
+                        "div"
+                    );
 
 
-skillCards.forEach(
-    function (card) {
-
-        card.addEventListener(
-            "click",
-            function () {
-
-                const skill =
-                    card.dataset.skill;
+                optionElement.classList.add(
+                    "live-option"
+                );
 
 
-                if (!skill) {
+                optionElement.innerHTML = `
 
-                    return;
+                    <span class="live-option-letter">
+                        ${letters[index]}
+                    </span>
 
-                }
+                    <span>
+                        ${option ?? ""}
+                    </span>
+
+                `;
 
 
-                startSkillTest(
-                    skill
+                optionElement.addEventListener(
+                    "click",
+                    function (event) {
+
+                        event.preventDefault();
+                        event.stopPropagation();
+
+
+                        document
+                            .querySelectorAll(
+                                ".live-option"
+                            )
+                            .forEach(
+                                function (item) {
+
+                                    item.classList.remove(
+                                        "selected"
+                                    );
+
+                                }
+                            );
+
+
+                        optionElement.classList.add(
+                            "selected"
+                        );
+
+
+                        selectedAnswer =
+                            index;
+
+
+                        if (answerMessage) {
+
+                            answerMessage.innerText =
+                                "Answer selected";
+
+                        }
+
+                    }
+                );
+
+
+                liveOptions.appendChild(
+                    optionElement
                 );
 
             }
         );
 
-    }
-);
 
-
-/* =========================================================
-   8. START APTITUDE TEST
-========================================================= */
-
-/*
-    IMPORTANT FIX:
-
-    The Aptitude button does NOT require
-    currentTestSkill.
-
-    It directly loads:
-
-        skill=Aptitude
-
-    from the questions API.
-*/
-
-const startAptitudeTestBtn =
-    document.getElementById(
-        "startAptitudeTestBtn"
-    );
-
-
-if (startAptitudeTestBtn) {
-
-    startAptitudeTestBtn.addEventListener(
-        "click",
-        async function () {
-
-            console.log(
-                "Starting Aptitude Test..."
-            );
-
-
-            /*
-                Always use Aptitude here.
-
-                Do NOT check currentTestSkill.
-            */
-
-            await startSkillTest(
-                "Aptitude"
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   9. NEXT QUESTION
-========================================================= */
-
-if (nextQuestionBtn) {
-
-    nextQuestionBtn.addEventListener(
-        "click",
-        function () {
-
+        if (nextQuestionBtn) {
 
             if (
-                selectedAnswer === null
-            ) {
-
-                if (answerMessage) {
-
-                    answerMessage.innerText =
-                        "Please select an answer first";
-
-                }
-
-                return;
-
-            }
-
-
-            userAnswers.push(
-                selectedAnswer
-            );
-
-
-            if (
-                currentQuestion <
+                currentQuestion ===
                 javascriptQuestions.length - 1
             ) {
 
-                currentQuestion++;
+                nextQuestionBtn.innerHTML = `
 
-                showQuestion();
+                    Submit Test
+
+                    <i class="bi bi-check-lg"></i>
+
+                `;
 
             }
 
             else {
 
-                showResults();
+                nextQuestionBtn.innerHTML = `
+
+                    Next Question
+
+                    <i class="bi bi-arrow-right"></i>
+
+                `;
 
             }
 
         }
-    );
-
-}
-
-
-/* =========================================================
-   10. SHOW TEST RESULTS
-========================================================= */
-
-async function showResults() {
-
-    console.log("=================================");
-    console.log("TEST COMPLETED");
-    console.log("=================================");
-
-    console.log("Questions:", javascriptQuestions);
-    console.log("User answers:", userAnswers);
-
-
-    let correctAnswers = 0;
-
-
-    const answerReviewList =
-        document.getElementById(
-            "answerReviewList"
-        );
-
-
-    if (answerReviewList) {
-
-        answerReviewList.innerHTML =
-            "<p>Loading your results...</p>";
 
     }
 
 
-    /*
-        Get result for every question
-    */
+    /* =========================================================
+       5. START TEST FOR ANY SKILL
+    ========================================================= */
 
-    const results = [];
+    async function startSkillTest(skill) {
 
+        if (!skill) {
 
-    try {
+            console.error(
+                "No skill supplied."
+            );
 
-        for (
-            let index = 0;
-            index < javascriptQuestions.length;
-            index++
-        ) {
+            return;
 
-            const question =
-                javascriptQuestions[index];
+        }
 
 
-            const selectedAnswerIndex =
-                userAnswers[index];
+        try {
 
-
-            /*
-                Convert selected option index
-                into A / B / C / D
-            */
-
-            const answerLetters = [
-                "A",
-                "B",
-                "C",
-                "D"
-            ];
-
-
-            const userAnswer =
-                selectedAnswerIndex !== undefined
-                    ? answerLetters[selectedAnswerIndex]
-                    : "";
+            currentTestSkill =
+                skill.trim();
 
 
             console.log(
-                "Submitting question:",
-                question.id,
-                "Answer:",
-                userAnswer
+                "Starting test for:",
+                currentTestSkill
             );
 
 
             const response =
                 await fetch(
-                    "http://localhost:5000/api/questions/submit",
-                    {
-                        method: "POST",
-
-                        headers: {
-                            "Content-Type":
-                                "application/json"
-                        },
-
-                        body: JSON.stringify({
-
-                            questionId:
-                                question.id,
-
-                            answer:
-                                userAnswer
-
-                        })
-
-                    }
+                    `${API_BASE_URL}/questions/random?skill=${encodeURIComponent(currentTestSkill)}&limit=20`
                 );
 
 
@@ -1635,306 +1824,77 @@ async function showResults() {
 
 
             console.log(
-                "Result response:",
+                "Questions API response:",
                 data
             );
 
 
-            if (!response.ok || !data.success) {
+            if (
+                !data.success ||
+                !Array.isArray(data.questions) ||
+                data.questions.length === 0
+            ) {
 
-                throw new Error(
-                    data.message ||
-                    "Unable to check answer."
+                alert(
+                    `No questions found for ${currentTestSkill}.`
                 );
 
-            }
-
-
-            results.push(data);
-
-
-            if (data.correct) {
-
-                correctAnswers++;
+                return;
 
             }
 
-        }
 
+            javascriptQuestions =
+                data.questions.map(
+                    function (question) {
 
-        console.log(
-            "All answers checked:",
-            results
-        );
+                        return {
 
+                            id:
+                                question.id,
 
-        /*
-            Calculate wrong answers
-        */
+                            question:
+                                question.question,
 
-        const wrongAnswers =
-            javascriptQuestions.length -
-            correctAnswers;
+                            options: [
 
-        const scorePercentage =
-            Math.round(
-                (correctAnswers /
-                    javascriptQuestions.length) *
-                100
-            );
-        /*
-            Display score
-        */
+                                question.option_a,
 
-        const finalScore =
-            document.getElementById(
-                "finalScore"
-            );
+                                question.option_b,
 
-        const scoreCircle =
-            document.querySelector(
-                ".score-circle strong"
-            );
+                                question.option_c,
 
-        const correctCount =
-            document.getElementById(
-                "correctCount"
-            );
+                                question.option_d
 
+                            ],
 
-        const wrongCount =
-            document.getElementById(
-                "wrongCount"
-            );
+                            correct:
+                                [
+                                    "A",
+                                    "B",
+                                    "C",
+                                    "D"
+                                ].indexOf(
+                                    String(
+                                        question.correct_answer
+                                    )
+                                        .trim()
+                                        .toUpperCase()
+                                )
 
+                        };
 
-        if (finalScore) {
-
-            finalScore.innerText =
-                correctAnswers +
-                " / " +
-                javascriptQuestions.length;
-
-        }
-
-        if (scoreCircle) {
-
-            scoreCircle.innerText =
-                scorePercentage + "%";
-
-        }
-
-
-        if (correctCount) {
-
-            correctCount.innerText =
-                correctAnswers;
-
-        }
-
-
-        if (wrongCount) {
-
-            wrongCount.innerText =
-                wrongAnswers;
-
-        }
-
-
-        /*
-            Clear old review
-        */
-
-        if (answerReviewList) {
-
-            answerReviewList.innerHTML =
-                "";
-
-        }
-
-
-        /*
-            Create answer review
-        */
-
-        results.forEach(
-            function (result, index) {
-
-                const reviewItem =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                reviewItem.classList.add(
-                    "review-item"
+                    }
                 );
 
-
-                if (result.correct) {
-
-                    reviewItem.classList.add(
-                        "correct"
-                    );
-
-                }
-
-                else {
-
-                    reviewItem.classList.add(
-                        "wrong"
-                    );
-
-                }
-
-
-                /*
-                    Create result content
-                */
-
-                reviewItem.innerHTML = `
-
-                    <div class="review-question">
-
-                        ${index + 1}.
-                        ${result.question}
-
-                    </div>
-
-
-                    <div class="review-answer">
-
-                        <strong>
-                            Your Answer:
-                        </strong>
-
-                        ${result.userAnswer || "Not answered"}
-
-                        <br>
-
-
-                        <strong>
-                            Correct Answer:
-                        </strong>
-
-                        ${result.correctAnswerText}
-
-
-                        <br><br>
-
-
-                        <strong>
-                            Explanation:
-                        </strong>
-
-                        <p>
-                            ${result.explanation}
-                        </p>
-
-                    </div>
-
-                `;
-
-
-                if (answerReviewList) {
-
-                    answerReviewList.appendChild(
-                        reviewItem
-                    );
-
-                }
-
-            }
-        );
-
-
-        /*
-            Hide test
-        */
-
-        if (liveTestBox) {
-
-            liveTestBox.style.display =
-                "none";
-
-        }
-
-
-        /*
-            Show result
-        */
-
-        if (liveResultBox) {
-
-            liveResultBox.style.display =
-                "block";
-
-
-            liveResultBox.scrollIntoView({
-
-                behavior: "smooth",
-
-                block: "start"
-
-            });
-
-        }
-
-
-        console.log(
-            "Test results displayed successfully."
-        );
-
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "RESULT PROCESSING ERROR:",
-            error
-        );
-
-
-        if (answerReviewList) {
-
-            answerReviewList.innerHTML = `
-
-                <p>
-                    Unable to load your test results.
-                </p>
-
-            `;
-
-        }
-
-    }
-
-}
-
-
-
-/* =========================================================
-   11. RESTART TEST
-========================================================= */
-
-const restartTestBtn =
-    document.getElementById(
-        "restartTestBtn"
-    );
-
-
-if (restartTestBtn) {
-
-    restartTestBtn.addEventListener(
-        "click",
-        function () {
 
             currentQuestion =
                 0;
 
+
             selectedAnswer =
                 null;
+
 
             userAnswers =
                 [];
@@ -1958,284 +1918,283 @@ if (restartTestBtn) {
 
             showQuestion();
 
+
+            if (liveTestBox) {
+
+                liveTestBox.scrollIntoView({
+
+                    behavior:
+                        "smooth",
+
+                    block:
+                        "start"
+
+                });
+
+            }
+
         }
-    );
 
-}
+        catch (error) {
 
-
-/* =========================================================
-   12. TEST UI READY
-========================================================= */
-
-if (
-    questionText &&
-    liveOptions &&
-    questionNumber &&
-    liveProgress
-) {
-
-    console.log(
-        "Test UI ready."
-    );
-
-}
-
-
-/* =========================================================
-   13. LOGOUT
-========================================================= */
-
-function logout() {
-
-    if (
-        typeof authService !==
-        "undefined" &&
-        typeof authService.logout ===
-        "function"
-    ) {
-
-        authService.logout();
-
-    }
-
-    else {
-
-        localStorage.removeItem(
-            "currentUser"
-        );
-
-        localStorage.removeItem(
-            "user"
-        );
-
-        localStorage.removeItem(
-            "token"
-        );
-
-    }
-
-
-    window.location.href =
-        "auth.html";
-
-}
-
-
-
-/* =========================================================
-   FEEDBACK FORM
-========================================================= */
-
-document.addEventListener("DOMContentLoaded", function () {
-
-    console.log("Feedback form starting...");
-
-
-    /* =====================================================
-       GET FORM ELEMENTS
-    ===================================================== */
-
-    const feedbackForm =
-        document.getElementById("feedbackForm");
-
-    const nameInput =
-        document.getElementById("name");
-
-    const emailInput =
-        document.getElementById("email");
-
-    const typeInput =
-        document.getElementById("type");
-
-    const subjectInput =
-        document.getElementById("subject");
-
-    const messageInput =
-        document.getElementById("message");
-
-    const feedbackStatus =
-        document.getElementById("feedbackStatus");
-
-
-    /* =====================================================
-       CHECK FORM
-    ===================================================== */
-
-    if (!feedbackForm) {
-
-        console.warn(
-            "Feedback form not found."
-        );
-
-        return;
-    }
-
-
-    /* =====================================================
-       GET LOGGED-IN USER
-    ===================================================== */
-
-    if (
-        typeof authService !== "undefined" &&
-        typeof authService.getCurrentUser === "function"
-    ) {
-
-        const currentUser =
-            authService.getCurrentUser();
-
-
-        if (currentUser) {
-
-            console.log(
-                "Logged-in user:",
-                currentUser
+            console.error(
+                "Skill test error:",
+                error
             );
 
 
-            /* ---------------------------------------------
-               AUTO-FILL NAME
-            --------------------------------------------- */
-
-            if (
-                nameInput &&
-                currentUser.name
-            ) {
-
-                nameInput.value =
-                    currentUser.name;
-
-            }
-
-
-            /* ---------------------------------------------
-               AUTO-FILL EMAIL
-            --------------------------------------------- */
-
-            if (
-                emailInput &&
-                currentUser.email
-            ) {
-
-                emailInput.value =
-                    currentUser.email;
-
-            }
-
-        }
-
-        else {
-
-            console.warn(
-                "No logged-in user found."
+            alert(
+                "Unable to load questions. Please try again."
             );
 
         }
 
     }
 
-    else {
 
-        console.warn(
-            "authService is not available."
+    /* =========================================================
+       6. SKILL CARD CLICK
+    ========================================================= */
+
+    function attachSkillCardListeners() {
+
+        const skillCards =
+            document.querySelectorAll(
+                ".test-skill-card"
+            );
+
+
+        skillCards.forEach(
+            function (card) {
+
+                if (
+                    card.dataset.testListenerAttached ===
+                    "true"
+                ) {
+
+                    return;
+
+                }
+
+
+                card.dataset.testListenerAttached =
+                    "true";
+
+
+                card.addEventListener(
+                    "click",
+                    function (event) {
+
+                        event.preventDefault();
+                        event.stopPropagation();
+
+
+                        const skill =
+                            card.dataset.skill;
+
+
+                        if (!skill) {
+
+                            return;
+
+                        }
+
+
+                        startSkillTest(
+                            skill
+                        );
+
+                    }
+                );
+
+            }
         );
 
     }
 
 
-    /* =====================================================
-       SUBMIT FEEDBACK
-    ===================================================== */
-
-    feedbackForm.addEventListener(
-        "submit",
-        async function (event) {
-
-            event.preventDefault();
+    attachSkillCardListeners();
 
 
-            /* ---------------------------------------------
-               READ FORM VALUES
-            --------------------------------------------- */
+    /* =========================================================
+       7. START APTITUDE TEST
+    ========================================================= */
 
-            const name =
-                nameInput.value.trim();
-
-            const email =
-                emailInput.value.trim();
-
-            const type =
-                typeInput.value;
-
-            const subject =
-                subjectInput.value.trim();
-
-            const message =
-                messageInput.value.trim();
+    const startAptitudeTestBtn =
+        document.getElementById(
+            "startAptitudeTestBtn"
+        );
 
 
-            /* ---------------------------------------------
-               VALIDATION
-            --------------------------------------------- */
+    if (startAptitudeTestBtn) {
 
-            if (
-                !name ||
-                !email ||
-                !type ||
-                !subject ||
-                !message
-            ) {
+        startAptitudeTestBtn.addEventListener(
+            "click",
+            async function (event) {
 
-                feedbackStatus.textContent =
-                    "Please fill in all fields.";
-
-                feedbackStatus.style.color =
-                    "red";
-
-                return;
-
-            }
+                event.preventDefault();
+                event.stopPropagation();
 
 
-            /* ---------------------------------------------
-               SHOW SUBMITTING STATUS
-            --------------------------------------------- */
-
-            feedbackStatus.textContent =
-                "Submitting feedback...";
-
-            feedbackStatus.style.color =
-                "";
-
-
-            /* Disable button while submitting */
-
-            const submitButton =
-                feedbackForm.querySelector(
-                    ".feedback-submit"
+                console.log(
+                    "Starting Aptitude Test..."
                 );
 
 
-            if (submitButton) {
-
-                submitButton.disabled =
-                    true;
-
-                submitButton.textContent =
-                    "Submitting...";
+                await startSkillTest(
+                    "Aptitude"
+                );
 
             }
+        );
+
+    }
 
 
-            /* =================================================
-               SEND TO BACKEND
-            ================================================= */
+    /* =========================================================
+       8. NEXT QUESTION
+    ========================================================= */
 
-            try {
+    if (nextQuestionBtn) {
+
+        nextQuestionBtn.addEventListener(
+            "click",
+            function (event) {
+
+                event.preventDefault();
+                event.stopPropagation();
+
+
+                if (
+                    selectedAnswer === null
+                ) {
+
+                    if (answerMessage) {
+
+                        answerMessage.innerText =
+                            "Please select an answer first";
+
+                    }
+
+                    return;
+
+                }
+
+
+                userAnswers.push(
+                    selectedAnswer
+                );
+
+
+                if (
+                    currentQuestion <
+                    javascriptQuestions.length - 1
+                ) {
+
+                    currentQuestion++;
+
+                    showQuestion();
+
+                }
+
+                else {
+
+                    showResults();
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* =========================================================
+       9. SHOW TEST RESULTS
+    ========================================================= */
+
+    async function showResults() {
+
+        console.log(
+            "================================="
+        );
+
+
+        console.log(
+            "TEST COMPLETED"
+        );
+
+
+        console.log(
+            "================================="
+        );
+
+
+        let correctAnswers =
+            0;
+
+
+        const answerReviewList =
+            document.getElementById(
+                "answerReviewList"
+            );
+
+
+        if (answerReviewList) {
+
+            answerReviewList.innerHTML =
+                "<p>Loading your results...</p>";
+
+        }
+
+
+        const results =
+            [];
+
+
+        try {
+
+            for (
+                let index = 0;
+                index < javascriptQuestions.length;
+                index++
+            ) {
+
+                const question =
+                    javascriptQuestions[index];
+
+
+                const selectedAnswerIndex =
+                    userAnswers[index];
+
+
+                const answerLetters = [
+                    "A",
+                    "B",
+                    "C",
+                    "D"
+                ];
+
+
+                const userAnswer =
+                    selectedAnswerIndex !== undefined
+                        ? answerLetters[
+                            selectedAnswerIndex
+                        ]
+                        : "";
+
+
+                console.log(
+                    "Submitting question:",
+                    question.id,
+                    "Answer:",
+                    userAnswer
+                );
+
 
                 const response =
                     await fetch(
-                        "http://localhost:5000/api/feedback",
+                        `${API_BASE_URL}/questions/submit`,
                         {
                             method: "POST",
 
@@ -2246,20 +2205,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
                             body: JSON.stringify({
 
-                                name:
-                                    name,
+                                questionId:
+                                    question.id,
 
-                                email:
-                                    email,
-
-                                type:
-                                    type,
-
-                                subject:
-                                    subject,
-
-                                message:
-                                    message
+                                answer:
+                                    userAnswer
 
                             })
 
@@ -2272,76 +2222,712 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
                 console.log(
-                    "Feedback API response:",
+                    "Result response:",
                     data
                 );
 
 
-                /* ---------------------------------------------
-                   HANDLE ERROR
-                --------------------------------------------- */
-
-                if (!response.ok) {
+                if (
+                    !response.ok ||
+                    !data.success
+                ) {
 
                     throw new Error(
                         data.message ||
-                        "Failed to submit feedback."
+                        "Unable to check answer."
                     );
 
                 }
 
 
-                /* ---------------------------------------------
-                   SUCCESS
-                --------------------------------------------- */
-
-                feedbackStatus.textContent =
-                    data.message ||
-                    "Thank you! Your feedback has been submitted successfully.";
-
-                feedbackStatus.style.color =
-                    "green";
+                results.push(
+                    data
+                );
 
 
-                /* Clear form */
+                if (data.correct) {
 
-                feedbackForm.reset();
+                    correctAnswers++;
+
+                }
+
+            }
 
 
-                /* ---------------------------------------------
-                   RESTORE USER INFORMATION
-                   AFTER RESET
-                --------------------------------------------- */
+            const wrongAnswers =
+                javascriptQuestions.length -
+                correctAnswers;
+
+
+            const scorePercentage =
+                javascriptQuestions.length > 0
+
+                    ? Math.round(
+                        (
+                            correctAnswers /
+                            javascriptQuestions.length
+                        ) * 100
+                    )
+
+                    : 0;
+
+
+            const finalScore =
+                document.getElementById(
+                    "finalScore"
+                );
+
+
+            const scoreCircle =
+                document.querySelector(
+                    ".score-circle strong"
+                );
+
+
+            const correctCount =
+                document.getElementById(
+                    "correctCount"
+                );
+
+
+            const wrongCount =
+                document.getElementById(
+                    "wrongCount"
+                );
+
+
+            if (finalScore) {
+
+                finalScore.innerText =
+                    correctAnswers +
+                    " / " +
+                    javascriptQuestions.length;
+
+            }
+
+
+            if (scoreCircle) {
+
+                scoreCircle.innerText =
+                    scorePercentage + "%";
+
+            }
+
+
+            if (correctCount) {
+
+                correctCount.innerText =
+                    correctAnswers;
+
+            }
+
+
+            if (wrongCount) {
+
+                wrongCount.innerText =
+                    wrongAnswers;
+
+            }
+
+
+            if (answerReviewList) {
+
+                answerReviewList.innerHTML =
+                    "";
+
+            }
+
+
+            results.forEach(
+                function (result, index) {
+
+                    const reviewItem =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    reviewItem.classList.add(
+                        "review-item"
+                    );
+
+
+                    if (result.correct) {
+
+                        reviewItem.classList.add(
+                            "correct"
+                        );
+
+                    }
+
+                    else {
+
+                        reviewItem.classList.add(
+                            "wrong"
+                        );
+
+                    }
+
+
+                    reviewItem.innerHTML = `
+
+                        <div class="review-question">
+
+                            ${index + 1}.
+                            ${result.question || ""}
+
+                        </div>
+
+                        <div class="review-answer">
+
+                            <strong>
+                                Your Answer:
+                            </strong>
+
+                            ${result.userAnswer || "Not answered"}
+
+                            <br>
+
+                            <strong>
+                                Correct Answer:
+                            </strong>
+
+                            ${result.correctAnswerText || ""}
+
+                            <br><br>
+
+                            <strong>
+                                Explanation:
+                            </strong>
+
+                            <p>
+                                ${result.explanation || ""}
+                            </p>
+
+                        </div>
+
+                    `;
+
+
+                    if (answerReviewList) {
+
+                        answerReviewList.appendChild(
+                            reviewItem
+                        );
+
+                    }
+
+                }
+            );
+
+
+            if (liveTestBox) {
+
+                liveTestBox.style.display =
+                    "none";
+
+            }
+
+
+            if (liveResultBox) {
+
+                liveResultBox.style.display =
+                    "block";
+
+
+                liveResultBox.scrollIntoView({
+
+                    behavior:
+                        "smooth",
+
+                    block:
+                        "start"
+
+                });
+
+            }
+
+
+            /*
+             * Update resume aptitude score.
+             */
+
+            const resumeScoreCircle =
+                document.querySelector(
+                    "#resume .score-circle strong"
+                );
+
+
+            if (resumeScoreCircle) {
+
+                resumeScoreCircle.innerText =
+                    scorePercentage + "%";
+
+            }
+
+
+            console.log(
+                "Test results displayed successfully."
+            );
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "RESULT PROCESSING ERROR:",
+                error
+            );
+
+
+            if (answerReviewList) {
+
+                answerReviewList.innerHTML = `
+
+                    <p>
+                        Unable to load your test results.
+                    </p>
+
+                `;
+
+            }
+
+        }
+
+    }
+
+
+    /* =========================================================
+       10. RESTART TEST
+    ========================================================= */
+
+    const restartTestBtn =
+        document.getElementById(
+            "restartTestBtn"
+        );
+
+
+    if (restartTestBtn) {
+
+        restartTestBtn.addEventListener(
+            "click",
+            function (event) {
+
+                event.preventDefault();
+                event.stopPropagation();
+
+
+                currentQuestion =
+                    0;
+
+
+                selectedAnswer =
+                    null;
+
+
+                userAnswers =
+                    [];
+
+
+                if (liveResultBox) {
+
+                    liveResultBox.style.display =
+                        "none";
+
+                }
+
+
+                if (liveTestBox) {
+
+                    liveTestBox.style.display =
+                        "block";
+
+                }
+
+
+                showQuestion();
+
+            }
+        );
+
+    }
+
+
+    /* =========================================================
+       11. TEST UI READY
+    ========================================================= */
+
+    if (
+        questionText &&
+        liveOptions &&
+        questionNumber &&
+        liveProgress
+    ) {
+
+        console.log(
+            "Test UI ready."
+        );
+
+    }
+
+
+    /* =========================================================
+       12. LOGOUT
+    ========================================================= */
+
+    function logout() {
+
+        console.log(
+            "Logging out..."
+        );
+
+
+        if (
+            typeof authService !==
+                "undefined" &&
+            typeof authService.logout ===
+                "function"
+        ) {
+
+            authService.logout();
+
+        }
+
+        else {
+
+            localStorage.removeItem(
+                "currentUser"
+            );
+
+            localStorage.removeItem(
+                "user"
+            );
+
+            localStorage.removeItem(
+                "token"
+            );
+
+        }
+
+
+        window.location.href =
+            "auth.html";
+
+    }
+
+
+    window.logout =
+        logout;
+
+
+    /* =========================================================
+       13. FEEDBACK FORM
+    ========================================================= */
+
+    console.log(
+        "Feedback form starting..."
+    );
+
+
+    const feedbackForm =
+        document.getElementById(
+            "feedbackForm"
+        );
+
+
+    const nameInput =
+        document.getElementById(
+            "name"
+        );
+
+
+    const emailInput =
+        document.getElementById(
+            "email"
+        );
+
+
+    const typeInput =
+        document.getElementById(
+            "type"
+        );
+
+
+    const subjectInput =
+        document.getElementById(
+            "subject"
+        );
+
+
+    const messageInput =
+        document.getElementById(
+            "message"
+        );
+
+
+    const feedbackStatus =
+        document.getElementById(
+            "feedbackStatus"
+        );
+
+
+    if (feedbackForm) {
+
+        /* =====================================================
+           AUTO-FILL USER
+        ===================================================== */
+
+        if (
+            typeof authService !==
+                "undefined" &&
+            typeof authService.getCurrentUser ===
+                "function"
+        ) {
+
+            const currentUser =
+                authService.getCurrentUser();
+
+
+            console.log(
+                "🔐 AUTH CHECK:",
+                currentUser
+            );
+
+
+            if (currentUser) {
 
                 if (
-                    typeof authService !== "undefined" &&
-                    typeof authService.getCurrentUser === "function"
+                    nameInput &&
+                    currentUser.name
                 ) {
 
-                    const currentUser =
-                        authService.getCurrentUser();
+                    nameInput.value =
+                        currentUser.name;
+
+                }
 
 
-                    if (currentUser) {
+                if (
+                    emailInput &&
+                    currentUser.email
+                ) {
 
-                        if (
-                            nameInput &&
-                            currentUser.name
-                        ) {
+                    emailInput.value =
+                        currentUser.email;
 
-                            nameInput.value =
-                                currentUser.name;
+                }
 
-                        }
+            }
+
+        }
 
 
-                        if (
-                            emailInput &&
-                            currentUser.email
-                        ) {
+        /* =====================================================
+           SUBMIT FEEDBACK
+        ===================================================== */
 
-                            emailInput.value =
-                                currentUser.email;
+        feedbackForm.addEventListener(
+            "submit",
+            async function (event) {
+
+                event.preventDefault();
+                event.stopPropagation();
+
+
+                const name =
+                    nameInput
+                        ? nameInput.value.trim()
+                        : "";
+
+
+                const email =
+                    emailInput
+                        ? emailInput.value.trim()
+                        : "";
+
+
+                const type =
+                    typeInput
+                        ? typeInput.value
+                        : "";
+
+
+                const subject =
+                    subjectInput
+                        ? subjectInput.value.trim()
+                        : "";
+
+
+                const message =
+                    messageInput
+                        ? messageInput.value.trim()
+                        : "";
+
+
+                if (
+                    !name ||
+                    !email ||
+                    !type ||
+                    !subject ||
+                    !message
+                ) {
+
+                    if (feedbackStatus) {
+
+                        feedbackStatus.textContent =
+                            "Please fill in all fields.";
+
+
+                        feedbackStatus.style.color =
+                            "red";
+
+                    }
+
+
+                    return;
+
+                }
+
+
+                if (feedbackStatus) {
+
+                    feedbackStatus.textContent =
+                        "Submitting feedback...";
+
+
+                    feedbackStatus.style.color =
+                        "";
+
+                }
+
+
+                const submitButton =
+                    feedbackForm.querySelector(
+                        ".feedback-submit"
+                    );
+
+
+                if (submitButton) {
+
+                    submitButton.disabled =
+                        true;
+
+
+                    submitButton.textContent =
+                        "Submitting...";
+
+                }
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            `${API_BASE_URL}/feedback`,
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body: JSON.stringify({
+
+                                    name:
+                                        name,
+
+                                    email:
+                                        email,
+
+                                    type:
+                                        type,
+
+                                    subject:
+                                        subject,
+
+                                    message:
+                                        message
+
+                                })
+
+                            }
+                        );
+
+
+                    const data =
+                        await response.json();
+
+
+                    console.log(
+                        "Feedback API response:",
+                        data
+                    );
+
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            data.message ||
+                            "Failed to submit feedback."
+                        );
+
+                    }
+
+
+                    if (feedbackStatus) {
+
+                        feedbackStatus.textContent =
+                            data.message ||
+                            "Thank you! Your feedback has been submitted successfully.";
+
+
+                        feedbackStatus.style.color =
+                            "green";
+
+                    }
+
+
+                    feedbackForm.reset();
+
+
+                    /* =================================================
+                       RESTORE USER INFORMATION
+                    ================================================= */
+
+                    if (
+                        typeof authService !==
+                            "undefined" &&
+                        typeof authService.getCurrentUser ===
+                            "function"
+                    ) {
+
+                        const currentUser =
+                            authService.getCurrentUser();
+
+
+                        if (currentUser) {
+
+                            if (
+                                nameInput &&
+                                currentUser.name
+                            ) {
+
+                                nameInput.value =
+                                    currentUser.name;
+
+                            }
+
+
+                            if (
+                                emailInput &&
+                                currentUser.email
+                            ) {
+
+                                emailInput.value =
+                                    currentUser.email;
+
+                            }
 
                         }
 
@@ -2349,50 +2935,64 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 }
 
-            }
+                catch (error) {
 
-            catch (error) {
-
-                console.error(
-                    "Feedback submission error:",
-                    error
-                );
+                    console.error(
+                        "Feedback submission error:",
+                        error
+                    );
 
 
-                feedbackStatus.textContent =
-                    error.message ||
-                    "Unable to submit feedback. Please try again.";
+                    if (feedbackStatus) {
 
-                feedbackStatus.style.color =
-                    "red";
+                        feedbackStatus.textContent =
+                            error.message ||
+                            "Unable to submit feedback. Please try again.";
 
-            }
 
-            finally {
+                        feedbackStatus.style.color =
+                            "red";
 
-                /* ---------------------------------------------
-                   ENABLE BUTTON AGAIN
-                --------------------------------------------- */
+                    }
 
-                if (submitButton) {
+                }
 
-                    submitButton.disabled =
-                        false;
+                finally {
 
-                    submitButton.textContent =
-                        "Submit Report";
+                    if (submitButton) {
+
+                        submitButton.disabled =
+                            false;
+
+
+                        submitButton.textContent =
+                            "Submit Report";
+
+                    }
 
                 }
 
             }
+        );
 
-        }
-    );
+    }
+
+    else {
+
+        console.warn(
+            "Feedback form not found."
+        );
+
+    }
 
 
     console.log(
         "Feedback form ready."
     );
 
-});
 
+    console.log(
+        "✅ DASHBOARD INITIALIZATION COMPLETE"
+    );
+
+});
