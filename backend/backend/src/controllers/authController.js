@@ -275,16 +275,18 @@ const googleLogin = async (req, res) => {
 
     } catch (error) {
 
-        console.error(
-            "Google login error:",
-            error
-        );
+    console.error("========== GOOGLE LOGIN ERROR ==========");
+    console.error("Error name:", error.name);
+    console.error("Error code:", error.code);
+    console.error("Error message:", error.message);
+    console.error("Full error:", error);
+    console.error("========================================");
 
-        return res.status(401).json({
-            success: false,
-            message: "Google authentication failed"
-        });
-    }
+    return res.status(401).json({
+        success: false,
+        message: "Google authentication failed"
+    });
+}
 };
 
 module.exports = {
