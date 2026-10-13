@@ -98,6 +98,11 @@ document
            Call backend registration
         ----------------------------------------- */
 
+        const signupButton = document.querySelector('#signupFormElement button[type="submit"]');
+        const originalSignupButtonHTML = signupButton ? signupButton.innerHTML : "";
+        if (signupButton) { signupButton.disabled = true; signupButton.innerHTML = '<span class="auth-inline-spinner" aria-hidden="true"></span> Creating account…'; }
+        if (window.showAppLoading) window.showAppLoading("Creating your account…", "Please keep this page open while we securely register you.");
+
         try {
 
             const result =
@@ -148,6 +153,9 @@ document
             alert(
                 "Unable to connect to the server."
             );
+        } finally {
+            if (window.hideAppLoading) window.hideAppLoading();
+            if (signupButton) { signupButton.disabled = false; signupButton.innerHTML = originalSignupButtonHTML; }
         }
 
     });
@@ -194,6 +202,11 @@ document
         /* -----------------------------------------
            Call backend login
         ----------------------------------------- */
+
+        const loginButton = document.querySelector('#loginFormElement button[type="submit"]');
+        const originalLoginButtonHTML = loginButton ? loginButton.innerHTML : "";
+        if (loginButton) { loginButton.disabled = true; loginButton.innerHTML = '<span class="auth-inline-spinner" aria-hidden="true"></span> Signing in…'; }
+        if (window.showAppLoading) window.showAppLoading("Signing you in…", "Verifying your account. Please wait.");
 
         try {
 
@@ -273,6 +286,9 @@ document
             alert(
                 "Unable to connect to the server."
             );
+        } finally {
+            if (window.hideAppLoading) window.hideAppLoading();
+            if (loginButton) { loginButton.disabled = false; loginButton.innerHTML = originalLoginButtonHTML; }
         }
 
     });
@@ -347,6 +363,7 @@ document.addEventListener(
 
     async function handleGoogleLogin(response) {
 
+        if (window.showAppLoading) window.showAppLoading("Signing in with Google…", "Waiting for Google authentication to finish.");
         try {
 
             const result =
@@ -382,6 +399,8 @@ document.addEventListener(
                 "Unable to complete Google login."
             );
 
+        } finally {
+            if (window.hideAppLoading) window.hideAppLoading();
         }
 
     }

@@ -554,3 +554,43 @@ function togglePassword(id, icon) {
     }
 
 }
+
+/* =========================================
+   SHARED LOADING FEEDBACK
+   Used by authentication and long-running actions.
+========================================= */
+(function installAppLoader() {
+    if (document.getElementById("appLoadingOverlay")) return;
+    const style = document.createElement("style");
+    style.textContent = `
+      #appLoadingOverlay { position:fixed; inset:0; z-index:99999; display:none;
+        align-items:center; justify-content:center; padding:24px; background:rgba(10,18,35,.48);
+        backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px); }
+      #appLoadingOverlay .app-loading-card { width:min(100%,320px); text-align:center; padding:26px 22px;
+        border-radius:18px; background:#fff; color:#172033; box-shadow:0 18px 55px rgba(0,0,0,.22); }
+      #appLoadingOverlay .app-loading-spinner { width:42px; height:42px; margin:0 auto 16px;
+        border:4px solid #dbeafe; border-top-color:#2563eb; border-radius:50%;
+        animation:appLoaderSpin .75s linear infinite; }
+      #appLoadingOverlay .app-loading-title { font-size:17px; font-weight:700; margin-bottom:7px; }
+      #appLoadingOverlay .app-loading-detail { font-size:13px; line-height:1.45; color:#64748b; }
+      @keyframes appLoaderSpin { to { transform:rotate(360deg); } }
+      @media (prefers-reduced-motion: reduce) { #appLoadingOverlay .app-loading-spinner { animation-duration:1.8s; } }
+    `;
+    document.head.appendChild(style);
+    const overlay = document.createElement("div");
+    overlay.id = "appLoadingOverlay";
+    overlay.setAttribute("role", "status");
+    overlay.setAttribute("aria-live", "polite");
+    overlay.innerHTML = '<div class="app-loading-card"><div class="app-loading-spinner" aria-hidden="true"></div><div class="app-loading-title" id="appLoadingTitle">Please wait…</div><div class="app-loading-detail" id="appLoadingDetail">This may take a few seconds.</div></div>';
+    document.body.appendChild(overlay);
+    window.showAppLoading = function(title, detail) {
+      document.getElementById("appLoadingTitle").textContent = title || "Please wait…";
+      document.getElementById("appLoadingDetail").textContent = detail || "This may take a few seconds.";
+      overlay.style.display = "flex";
+      document.body.setAttribute("aria-busy", "true");
+    };
+    window.hideAppLoading = function() {
+      overlay.style.display = "none";
+      document.body.removeAttribute("aria-busy");
+    };
+})();

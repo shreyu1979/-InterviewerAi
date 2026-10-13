@@ -6947,6 +6947,8 @@ footer {
     background: #171f2d;
 
     border: 1px solid #2c384b;
+
+    margin: 25px;
 }
 
 .result-top {
@@ -6955,6 +6957,8 @@ footer {
     justify-content: space-between;
 
     align-items: center;
+
+    margin: 20px;
 }
 
 .result-top span {
@@ -8237,3 +8241,8 @@ body.profile-modal-open {
     visibility: visible !important;
     opacity: 1 !important;
 }
+
+/* Authentication loading state */
+.auth-btn:disabled { opacity:.78; cursor:wait; }
+.auth-inline-spinner { display:inline-block; width:14px; height:14px; margin-right:8px; vertical-align:-2px; border:2px solid currentColor; border-right-color:transparent; border-radius:50%; animation:authSpin .7s linear infinite; }
+@keyframes authSpin { to { transform:rotate(360deg); } }
