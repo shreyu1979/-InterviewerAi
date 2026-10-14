@@ -1,121 +1,86 @@
 const fs = require("fs");
-const path = require("path");
-const { execFile } = require("child_process");
-const { promisify } = require("util");
-const pdfParse = require("pdf-parse");
+const pdfjsLib = require("pdfjs-dist/legacy/build/pdf.mjs");
+const { createCanvas } = require("@napi-rs/canvas");
 const { createWorker } = require("tesseract.js");
 
-const execFileAsync = promisify(execFile);
-
-const POPPLER_PATH =
-    "C:\\Users\\admin\\Downloads\\poppler\\poppler-26.09.0\\Library\\bin\\pdftoppm.exe";
-
 const extractTextFromPDF = async (filePath) => {
+    let worker;
+    let pdf;
+
     try {
         console.log("Starting PDF text extraction...");
 
         const dataBuffer = fs.readFileSync(filePath);
 
-        // -----------------------------------
-        // STEP 1: Try normal PDF text extraction
-        // -----------------------------------
-        const data = await pdfParse(dataBuffer);
+        // STEP 1: Load PDF using PDF.js
+        pdf = await pdfjsLib.getDocument({
+            data: new Uint8Array(dataBuffer),
+            useSystemFonts: true
+        }).promise;
 
-        const normalText = data.text ? data.text.trim() : "";
+        console.log("PDF pages:", pdf.numPages);
+
+        // STEP 2: Extract normal PDF text
+        let normalText = "";
+
+        for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            const content = await page.getTextContent();
+
+            normalText += content.items
+                .map(item => item.str || "")
+                .join(" ") + "\n";
+        }
+
+        normalText = normalText.trim();
 
         console.log(
             "Normal PDF extraction length:",
             normalText.length
         );
 
-        // If enough text was extracted, use it
         if (normalText.length > 50) {
             console.log("Normal PDF extraction successful.");
             return normalText;
         }
 
-        // -----------------------------------
-        // STEP 2: PDF text extraction failed
-        // Use Poppler to convert PDF → PNG
-        // -----------------------------------
-        console.log(
-            "Normal extraction too short. Starting OCR..."
-        );
+        // STEP 3: Scanned PDF - Start OCR
+        console.log("Normal extraction too short. Starting OCR...");
 
-        const tempPrefix = path.join(
-            path.dirname(filePath),
-            `ocr-${Date.now()}`
-        );
-
-        console.log("Rendering PDF pages...");
-
-        await execFileAsync(POPPLER_PATH, [
-            "-png",
-            "-r",
-            "200",
-            filePath,
-            tempPrefix
-        ]);
-
-        // -----------------------------------
-        // STEP 3: Find generated PNG pages
-        // -----------------------------------
-        const uploadDir = path.dirname(filePath);
-
-        const prefixName = path.basename(tempPrefix);
-
-        const imageFiles = fs
-            .readdirSync(uploadDir)
-            .filter(
-                (file) =>
-                    file.startsWith(prefixName) &&
-                    file.endsWith(".png")
-            )
-            .sort();
-
-        console.log(
-            "OCR images generated:",
-            imageFiles
-        );
-
-        if (imageFiles.length === 0) {
-            throw new Error(
-                "Poppler did not generate any PNG pages."
-            );
-        }
-
-        // -----------------------------------
-        // STEP 4: Start Tesseract OCR
-        // -----------------------------------
-        console.log("Starting Tesseract OCR...");
-
-        const worker = await createWorker("eng");
+        worker = await createWorker("eng");
 
         let extractedText = "";
 
-        for (const imageFile of imageFiles) {
-            const imagePath = path.join(
-                uploadDir,
-                imageFile
+        for (let i = 1; i <= pdf.numPages; i++) {
+            console.log("Rendering PDF page:", i);
+
+            const page = await pdf.getPage(i);
+
+            const viewport = page.getViewport({
+                scale: 2
+            });
+
+            const canvas = createCanvas(
+                Math.ceil(viewport.width),
+                Math.ceil(viewport.height)
             );
 
-            console.log(
-                "OCR processing:",
-                imageFile
-            );
+            const context = canvas.getContext("2d");
 
-            const result = await worker.recognize(
-                imagePath
-            );
+            await page.render({
+                canvasContext: context,
+                viewport: viewport
+            }).promise;
 
-            extractedText +=
-                result.data.text + "\n";
+            // Convert rendered page to PNG
+            const imageBuffer = canvas.toBuffer("image/png");
 
-            // Remove temporary PNG
-            fs.unlinkSync(imagePath);
+            console.log("Running OCR on page:", i);
+
+            const result = await worker.recognize(imageBuffer);
+
+            extractedText += result.data.text + "\n";
         }
-
-        await worker.terminate();
 
         extractedText = extractedText.trim();
 
@@ -126,19 +91,24 @@ const extractTextFromPDF = async (filePath) => {
 
         if (!extractedText) {
             throw new Error(
-                "OCR could not extract any text from the PDF."
+                "OCR could not extract text from the PDF."
             );
         }
 
         return extractedText;
 
     } catch (error) {
-        console.error(
-            "PDF text extraction error:",
-            error.message
-        );
-
+        console.error("PDF extraction error:", error);
         throw error;
+
+    } finally {
+        if (worker) {
+            await worker.terminate();
+        }
+
+        if (pdf) {
+            await pdf.destroy();
+        }
     }
 };
 
