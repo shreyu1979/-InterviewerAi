@@ -2911,105 +2911,78 @@ document.addEventListener("DOMContentLoaded", function () {
 
             }
 
-            results.forEach(
+            
+results.forEach(function (result, index) {
+    const reviewItem = document.createElement("div");
+    reviewItem.classList.add("review-item");
 
-                function (result, index) {
+    const isAnswered = Boolean(result.userAnswer);
+    const isCorrect = result.correct === true;
 
-                    const reviewItem =
+    reviewItem.classList.add(
+        !isAnswered ? "unanswered" :
+        isCorrect ? "correct" : "wrong"
+    );
 
-                        document.createElement(
+    const answerLabels = {
+        A: "A",
+        B: "B",
+        C: "C",
+        D: "D"
+    };
 
-                            "div"
+    const selectedAnswer = result.userAnswer || "";
+    const correctAnswer = result.correctAnswer || "";
 
-                        );
+    const statusText = !isAnswered
+        ? "Not Answered"
+        : isCorrect
+            ? "Correct Answer"
+            : "Incorrect Answer";
 
-                    reviewItem.classList.add(
+    const selectedText = isAnswered
+        ? `${answerLabels[selectedAnswer] || selectedAnswer}`
+        : "Not answered";
 
-                        "review-item"
+    const correctText = result.correctAnswerText || correctAnswer || "Not available";
 
-                    );
+    reviewItem.innerHTML = `
+        <div class="review-question">
+            <strong>Question ${index + 1}:</strong>
+            ${result.question || "Question unavailable"}
+        </div>
 
-                    if (result.correct) {
+        <div class="review-status ${!isAnswered ? "unanswered" : isCorrect ? "correct" : "wrong"}">
+            ${statusText}
+        </div>
 
-                        reviewItem.classList.add(
+        <div class="review-answer">
+            <p>
+                <strong>Your Answer:</strong>
+                <span class="${!isAnswered ? "unanswered-text" : isCorrect ? "correct-text" : "wrong-text"}">
+                    ${selectedText}
+                </span>
+            </p>
 
-                            "correct"
+            <p>
+                <strong>Correct Answer:</strong>
+                <span class="correct-text">
+                    ${correctAnswer ? correctAnswer + ". " : ""}${correctText}
+                </span>
+            </p>
 
-                        );
+            <div class="review-explanation">
+                <strong>Explanation:</strong>
+                <p>${result.explanation || "No explanation available."}</p>
+            </div>
+        </div>
+    `;
 
-                    }
+    if (answerReviewList) {
+        answerReviewList.appendChild(reviewItem);
+    }
+});
 
-                    else {
-
-                        reviewItem.classList.add(
-
-                            "wrong"
-
-                        );
-
-                    }
-
-                    reviewItem.innerHTML = `
-
-                        <div class="review-question">
-
-                            ${index + 1}.
-
-                            ${result.question || ""}
-
-                        </div>
-
-                        <div class="review-answer">
-
-                            <strong>
-
-                                Your Answer:
-
-                            </strong>
-
-                            ${result.userAnswer || "Not answered"}
-
-                            <br>
-
-                            <strong>
-
-                                Correct Answer:
-
-                            </strong>
-
-                            ${result.correctAnswerText || ""}
-
-                            <br><br>
-
-                            <strong>
-
-                                Explanation:
-
-                            </strong>
-
-                            <p>
-
-                                ${result.explanation || ""}
-
-                            </p>
-
-                        </div>
-
-                    `;
-
-                    if (answerReviewList) {
-
-                        answerReviewList.appendChild(
-
-                            reviewItem
-
-                        );
-
-                    }
-
-                }
-
-            );
 
             if (liveTestBox) {
 

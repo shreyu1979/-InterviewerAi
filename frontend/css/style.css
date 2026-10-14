@@ -1198,7 +1198,7 @@ footer {
 
 #resumeResults {
     display: block;
-} 
+}
 
 
 /* =========================================
@@ -8243,6 +8243,85 @@ body.profile-modal-open {
 }
 
 /* Authentication loading state */
-.auth-btn:disabled { opacity:.78; cursor:wait; }
-.auth-inline-spinner { display:inline-block; width:14px; height:14px; margin-right:8px; vertical-align:-2px; border:2px solid currentColor; border-right-color:transparent; border-radius:50%; animation:authSpin .7s linear infinite; }
-@keyframes authSpin { to { transform:rotate(360deg); } }
+.auth-btn:disabled {
+    opacity: .78;
+    cursor: wait;
+}
+
+.auth-inline-spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    margin-right: 8px;
+    vertical-align: -2px;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: authSpin .7s linear infinite;
+}
+
+@keyframes authSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+
+
+.review-item {
+    padding: 18px;
+    margin-bottom: 18px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    background: #fff;
+}
+
+.review-question {
+    font-weight: 600;
+    margin-bottom: 14px;
+}
+
+.review-status {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.review-status.correct {
+    color: #15803d;
+    background: #dcfce7;
+}
+
+.review-status.wrong {
+    color: #b91c1c;
+    background: #fee2e2;
+}
+
+.review-status.unanswered {
+    color: #92400e;
+    background: #fef3c7;
+}
+
+.correct-text {
+    color: #15803d;
+    font-weight: 600;
+}
+
+.wrong-text {
+    color: #dc2626;
+    font-weight: 600;
+}
+
+.unanswered-text {
+    color: #92400e;
+    font-weight: 600;
+}
+
+.review-explanation {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+}
