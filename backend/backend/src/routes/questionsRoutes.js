@@ -137,8 +137,8 @@ router.get("/questions/random", (req, res) => {
 
     const limit =
         Number.isInteger(requestedLimit) &&
-        requestedLimit > 0 &&
-        requestedLimit <= 100
+            requestedLimit > 0 &&
+            requestedLimit <= 100
 
             ? requestedLimit
 
@@ -322,21 +322,12 @@ router.post(
 
 
                 return res.json({
-
                     success: true,
-
-                    questionId:
-                        question.id,
-
-                    correct:
-                        isCorrect,
-
-                    correctAnswer:
-                        question.correct_answer,
-
-                    explanation:
-                        question.explanation
-
+                    questionId: question.id,
+                    userAnswer: userAnswer,
+                    correct: isCorrect,
+                    correctAnswer: correctAnswer,
+                    explanation: question.explanation
                 });
 
             }
