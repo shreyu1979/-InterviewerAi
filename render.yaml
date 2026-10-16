@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: tobehired
+    runtime: node
+    buildCommand: apt-get update && apt-get install -y poppler-utils && cd backend && npm install
+    startCommand: cd backend && npm start

@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>tobeHired | Sign In</title>
+
+
+    <!-- Bootstrap CSS -->
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- Bootstrap Icons -->
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+
+    <!-- Google Font -->
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Project Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+
+    <!--Google Login-->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+</head>
+
+
+<body>
+
+    <!-- =========================================
+         AUTH PAGE
+    ========================================= -->
+
+    <div id="authPage" style="display: block;">
+        <button class="back-home-btn" onclick="goHome()">
+            <i class="bi bi-arrow-left"></i>
+            Back to Home
+        </button>
+
+        <nav class="auth-navbar">
+
+
+            <a href="index.html" class="brand">
+
+                <span class="brand-icon">
+
+                    <i class="bi bi-stars"></i>
+
+                </span>
+
+                tobe<span>Hired</span>
+
+            </a>
+
+
+        </nav>
+
+
+
+        <section class="auth-container">
+
+
+            <div class="auth-card">
+
+
+                <!-- LOGIN FORM -->
+
+                <div id="loginForm">
+
+
+                    <div class="auth-header">
+
+
+                        <div class="ai-icon">
+
+                            <i class="bi bi-robot"></i>
+
+                        </div>
+
+
+                        <h1>Welcome Back</h1>
+
+
+                        <p>
+                            Continue your interview preparation journey.
+                        </p>
+
+
+                    </div>
+
+
+
+                    <form id="loginFormElement">
+
+
+                        <label class="form-label">
+
+                            Email Address
+
+                        </label>
+
+
+                        <div class="input-group-custom">
+
+
+                            <i class="bi bi-envelope input-icon"></i>
+
+
+                            <input type="email" id="loginEmail" class="form-control-custom"
+                                placeholder="Enter your email" required>
+
+
+                        </div>
+
+
+
+                        <label class="form-label">
+
+                            Password
+
+                        </label>
+
+
+                        <div class="input-group-custom">
+
+
+                            <i class="bi bi-lock input-icon"></i>
+
+
+                            <input type="password" id="loginPassword" class="form-control-custom"
+                                placeholder="Enter your password" required>
+
+
+                            <i class="bi bi-eye password-eye" onclick="togglePassword('loginPassword', this)"></i>
+
+
+                        </div>
+
+
+
+                        <div class="form-options">
+
+
+                            <label class="remember">
+
+
+                                <input type="checkbox" id="rememberMe">
+
+
+                                Remember me
+
+
+                            </label>
+
+
+
+                            <a href="#" class="forgot">
+
+                                Forgot Password?
+
+                            </a>
+
+
+                        </div>
+
+
+
+                        <button type="submit" class="auth-btn">
+
+                            Sign In
+
+                            <i class="bi bi-arrow-right ms-2"></i>
+
+
+                        </button>
+
+
+                    </form>
+
+
+
+                    <div class="divider">
+
+                        OR CONTINUE WITH
+
+                    </div>
+
+
+
+                    <div id="g_id_onload"
+                        data-client_id="95674554000-rocduccu3347ljks8tdu84gm5udth9u4.apps.googleusercontent.com"
+                        data-callback="handleGoogleLogin" data-auto_prompt="false">
+                    </div>
+
+                    <div class="google-btn-wrapper">
+                        <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline"
+                            data-text="continue_with" data-shape="rectangular" data-logo_alignment="left">
+                        </div>
+                    </div>
+
+
+
+                    <div class="switch-text">
+
+
+                        Don't have an account?
+
+
+                        <button type="button" class="switch-btn" onclick="showSignup()">
+
+                            Create Account
+
+                        </button>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- SIGNUP FORM -->
+
+                <div id="signupForm">
+
+
+                    <div class="auth-header">
+
+
+                        <div class="ai-icon">
+
+                            <i class="bi bi-person-plus"></i>
+
+                        </div>
+
+
+                        <h1>Create Account</h1>
+
+
+                        <p>
+                            Start preparing smarter with AI.
+                        </p>
+
+
+                    </div>
+
+
+
+                    <form id="signupFormElement">
+
+
+                        <label class="form-label">
+
+                            Full Name
+
+                        </label>
+
+
+                        <div class="input-group-custom">
+
+
+                            <i class="bi bi-person input-icon"></i>
+
+
+                            <input type="text" id="signupName" class="form-control-custom"
+                                placeholder="Enter your full name" required>
+
+
+                        </div>
+
+
+
+                        <label class="form-label">
+
+                            Email Address
+
+                        </label>
+
+
+                        <div class="input-group-custom">
+
+
+                            <i class="bi bi-envelope input-icon"></i>
+
+
+                            <input type="email" id="signupEmail" class="form-control-custom"
+                                placeholder="Enter your email" required>
+
+
+                        </div>
+
+
+
+                        <label class="form-label">
+
+                            Password
+
+                        </label>
+
+
+                        <div class="input-group-custom">
+
+
+                            <i class="bi bi-lock input-icon"></i>
+
+
+                            <input type="password" id="signupPassword" class="form-control-custom"
+                                placeholder="Create a password" required>
+
+
+                            <i class="bi bi-eye password-eye" onclick="togglePassword('signupPassword', this)"></i>
+
+
+                        </div>
+
+
+
+                        <label class="form-label">
+
+                            Confirm Password
+
+                        </label>
+
+
+                        <div class="input-group-custom">
+
+
+                            <i class="bi bi-shield-lock input-icon"></i>
+
+
+                            <input type="password" id="confirmPassword" class="form-control-custom"
+                                placeholder="Confirm your password" required>
+
+
+                            <i class="bi bi-eye password-eye" onclick="togglePassword('confirmPassword', this)"></i>
+
+
+                        </div>
+
+
+
+                        <div class="form-options">
+
+
+                            <label class="remember">
+
+
+                                <input type="checkbox" required>
+
+
+                                I agree to the terms
+
+
+                            </label>
+
+
+                        </div>
+
+
+
+                        <button type="submit" class="auth-btn">
+
+                            Create Account
+
+                            <i class="bi bi-arrow-right ms-2"></i>
+
+                        </button>
+
+
+                    </form>
+
+
+
+                    <div class="switch-text">
+
+
+                        Already have an account?
+
+
+                        <button type="button" class="switch-btn" onclick="showLogin()">
+
+                            Sign In
+
+                        </button>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+    </div>
+
+
+    <!-- Bootstrap JavaScript -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Shared logic (auth service, etc.) -->
+    <script src="js/common.js"></script>
+
+    <!-- Auth page logic -->
+    <script src="js/login.js"></script>
+
+</body>
+
+</html>
