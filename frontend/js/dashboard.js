@@ -2911,77 +2911,102 @@ document.addEventListener("DOMContentLoaded", function () {
 
             }
 
-            
-results.forEach(function (result, index) {
-    const reviewItem = document.createElement("div");
-    reviewItem.classList.add("review-item");
 
-    const isAnswered = Boolean(result.userAnswer);
-    const isCorrect = result.correct === true;
 
-    reviewItem.classList.add(
-        !isAnswered ? "unanswered" :
-        isCorrect ? "correct" : "wrong"
-    );
+            results.forEach(function (result, index) {
+                const reviewItem = document.createElement("div");
+                reviewItem.classList.add("review-item");
 
-    const answerLabels = {
-        A: "A",
-        B: "B",
-        C: "C",
-        D: "D"
-    };
+                // Get the original question and its options
+                const questionData = javascriptQuestions[index] || {};
 
-    const selectedAnswer = result.userAnswer || "";
-    const correctAnswer = result.correctAnswer || "";
+                const questionText = javascriptQuestions[index]?.question || result.question || "Question unavailable";
 
-    const statusText = !isAnswered
-        ? "Not Answered"
-        : isCorrect
-            ? "Correct Answer"
-            : "Incorrect Answer";
+                const options = {
+                    A: questionData.options?.[0],
+                    B: questionData.options?.[1],
+                    C: questionData.options?.[2],
+                    D: questionData.options?.[3]
+                };
 
-    const selectedText = isAnswered
-        ? `${answerLabels[selectedAnswer] || selectedAnswer}`
-        : "Not answered";
+                const selectedAnswer = (result.userAnswer || "").toUpperCase();
+                console.log("ANSWER REVIEW DEBUG:", {
+                    result: result,
+                    questionData: javascriptQuestions[index],
+                    selectedAnswer: result.userAnswer,
+                    correctAnswer: result.correctAnswer,
+                    correctAnswerText: result.correctAnswerText
+                });
 
-    const correctText = result.correctAnswerText || correctAnswer || "Not available";
+                const correctAnswer = (result.correctAnswer || "").toUpperCase();
 
-    reviewItem.innerHTML = `
-        <div class="review-question">
-            <strong>Question ${index + 1}:</strong>
-            ${result.question || "Question unavailable"}
-        </div>
+                const selectedText = selectedAnswer
+                    ? `${selectedAnswer}. ${options[selectedAnswer] || ""}`
+                    : "Not answered";
 
-        <div class="review-status ${!isAnswered ? "unanswered" : isCorrect ? "correct" : "wrong"}">
-            ${statusText}
-        </div>
+                const correctOptionText =
+                    options[correctAnswer] ||
+                    result.correctAnswerText ||
+                    "Answer text unavailable";
 
-        <div class="review-answer">
-            <p>
-                <strong>Your Answer:</strong>
-                <span class="${!isAnswered ? "unanswered-text" : isCorrect ? "correct-text" : "wrong-text"}">
-                    ${selectedText}
-                </span>
-            </p>
+                const isAnswered = Boolean(selectedAnswer);
+                const isCorrect = result.correct === true;
 
-            <p>
-                <strong>Correct Answer:</strong>
-                <span class="correct-text">
-                    ${correctAnswer ? correctAnswer + ". " : ""}${correctText}
-                </span>
-            </p>
+                reviewItem.classList.add(
+                    !isAnswered ? "unanswered" :
+                        isCorrect ? "correct" : "wrong"
+                );
 
-            <div class="review-explanation">
-                <strong>Explanation:</strong>
-                <p>${result.explanation || "No explanation available."}</p>
-            </div>
-        </div>
-    `;
+                const statusText = !isAnswered
+                    ? "Not Answered"
+                    : isCorrect
+                        ? "Correct Answer"
+                        : "Incorrect Answer";
 
-    if (answerReviewList) {
-        answerReviewList.appendChild(reviewItem);
-    }
-});
+                // Build the review safely
+                const questionDiv = document.createElement("div");
+                questionDiv.className = "review-question";
+                questionDiv.textContent = `Question ${index + 1}: ${questionText}`;
+
+                const statusDiv = document.createElement("div");
+                statusDiv.className = `review-status ${!isAnswered ? "unanswered" : isCorrect ? "correct" : "wrong"}`;
+                statusDiv.textContent = statusText;
+
+                const answerDiv = document.createElement("div");
+                answerDiv.className = "review-answer";
+
+                const yourAnswer = document.createElement("p");
+                yourAnswer.textContent = `Your Answer: ${selectedText}`;
+                yourAnswer.className = !isAnswered ? "unanswered-text" : isCorrect ? "correct-text" : "wrong-text";
+
+                const correctAnswerLine = document.createElement("p");
+                correctAnswerLine.className = "correct-text";
+                correctAnswerLine.textContent = `Correct Answer: ${correctAnswer}. ${correctOptionText}`;
+
+                const explanationDiv = document.createElement("div");
+                explanationDiv.className = "review-explanation";
+
+                const explanationTitle = document.createElement("strong");
+                explanationTitle.textContent = "Explanation:";
+
+                const explanationText = document.createElement("p");
+                explanationText.textContent = result.explanation || "No explanation available.";
+
+                explanationDiv.appendChild(explanationTitle);
+                explanationDiv.appendChild(explanationText);
+
+                answerDiv.appendChild(yourAnswer);
+                answerDiv.appendChild(correctAnswerLine);
+                answerDiv.appendChild(explanationDiv);
+
+                reviewItem.appendChild(questionDiv);
+                reviewItem.appendChild(statusDiv);
+                reviewItem.appendChild(answerDiv);
+
+                if (answerReviewList) {
+                    answerReviewList.appendChild(reviewItem);
+                }
+            });
 
 
             if (liveTestBox) {

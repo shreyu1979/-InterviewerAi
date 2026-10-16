@@ -21,8 +21,8 @@ app.use(express.json());
 
 app.use("/api", profileRoutes);
 app.use("/api", analyticsRoutes);
-app.use("/api", questionsRoutes);
 app.use("/api", questionRoutes);
+app.use("/api", questionsRoutes);
 app.use("/api", authRoutes);
 app.use("/api", resumeRoutes);
 app.use("/api/feedback", feedbackRoutes);
