@@ -2106,21 +2106,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 );
 
-                optionElement.innerHTML = `
+                const letterElement = document.createElement("span");
+                letterElement.classList.add("live-option-letter");
+                letterElement.textContent = letters[index];
 
-                    <span class="live-option-letter">
+                const textElement = document.createElement("span");
+                textElement.textContent = option ?? "";
 
-                        ${letters[index]}
-
-                    </span>
-
-                    <span>
-
-                        ${option ?? ""}
-
-                    </span>
-
-                `;
+                optionElement.appendChild(letterElement);
+                optionElement.appendChild(textElement);
 
                 optionElement.addEventListener(
 
